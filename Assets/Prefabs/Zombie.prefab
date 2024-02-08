@@ -154,9 +154,9 @@ MonoBehaviour:
   target: {fileID: 3175780480716276596, guid: add20350be92b764a8e957e3c879ceeb, type: 3}
   targetLook: {fileID: 8490171791751673999}
   distanceToPlayer: 0
-  attackRange: 2
-  attackCycleTimer: 1.5
-  attackRate: 2
+  attackRange: 2.5
+  attackCycleTimer: 0.5
+  attackRate: 1
   attackDamage: 20
 --- !u!54 &8490171792350145662
 Rigidbody:

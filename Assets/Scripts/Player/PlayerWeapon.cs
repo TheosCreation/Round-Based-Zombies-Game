@@ -1,34 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    //rework
-    
-    public ParticleSystem muzzleFlash;
+    //implement hipfire spread and use isaiming to ignore spread
+    public UIManager UI;
     public ParticleSystem impactEffect;
     public ParticleSystem impactBloodEffect;
     public Camera cam;
+    public PlayerPoints playerPoints;
     
     [Header("Weapon Values")]
+    public Vector3 aimingPosition;
+    public Quaternion aimingRotation;
+    public Vector3 hipfirePosition;
+    public Quaternion hipfireRotation;
     [SerializeField] private Transform gunBarrel;
-    [SerializeField] private Vector3 bulletSpread = new Vector3(0.5f, 0.5f, 0.5f);
     [SerializeField] private TrailRenderer bulletTrail;
     [SerializeField] private float bulletRange;
     [SerializeField] private float fireRate, reloadTime;
     [SerializeField] private bool isAutomatic;
     [SerializeField] private int magSize;
     [SerializeField] private float bulletDamage;
-
-    private int ammoLeft;
-    private bool isShooting, readyToShoot, reloading;
+    public int ammoLeft;
+    private bool isShooting, readyToShoot, reloading;//isAiming;
     private RaycastHit hit;
+    [SerializeField] private GameObject bulletHolePrefab;
+    [SerializeField] private GameObject MuzzleFlashPrefab;
+    private float bulletHoleLifeSpan = 5.0f;
+
+     [Header("Audio")]
+    public AudioSource audioInCamera;
+    public AudioClip[] fireSounds;
+
+
     void Awake()
     {
         ammoLeft = magSize;
         readyToShoot = true;
-        gunBarrel = GetComponent<Transform>();
     }
 
     void Update()
@@ -36,6 +47,9 @@ public class PlayerWeapon : MonoBehaviour
         if(isShooting && readyToShoot && !reloading && ammoLeft > 0)
         {
             PerformShot();
+        } else if(isShooting && ammoLeft <= 0 && !readyToShoot) 
+        {
+            Reload();
         }
     }
 
@@ -54,12 +68,16 @@ public class PlayerWeapon : MonoBehaviour
         readyToShoot = false;
         Vector3 direction = cam.transform.forward;
 
-        muzzleFlash.Play();
+        GameObject muzzleFlash = Instantiate(MuzzleFlashPrefab, gunBarrel.position, Quaternion.identity);
+        muzzleFlash.transform.rotation = gunBarrel.rotation;
+        Destroy(muzzleFlash, 0.02f);
+        
+        PlayWeaponFireSound();
         
         if(Physics.Raycast(cam.transform.position, direction, out hit, bulletRange))
         {
             //Debug.Log(hit.collider.gameObject.name);
-            TrailRenderer trail = Instantiate(bulletTrail, gunBarrel.transform.position, Quaternion.identity);
+            TrailRenderer trail = Instantiate(bulletTrail, gunBarrel.position, Quaternion.identity);
             StartCoroutine(SpawnTrail(trail, hit));
             ZombieHealth target = hit.transform.GetComponent<ZombieHealth>();
             if(target != null)
@@ -67,9 +85,15 @@ public class PlayerWeapon : MonoBehaviour
                 target.TakeDamage(bulletDamage);
                 ParticleSystem impactBloodEffectPS = Instantiate(impactBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impactBloodEffectPS, 1);
+                //award more points for headshot
+                playerPoints.Points += 10;
+                UI.UpdatePointsUI(playerPoints.Points);
             }
             else{
                 ParticleSystem impactEffectPS = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                GameObject bulletHole = Instantiate(bulletHolePrefab, hit.point + hit.normal * 0.001f, Quaternion.identity);
+                bulletHole.transform.LookAt(hit.point + hit.normal);
+                Destroy(bulletHole, bulletHoleLifeSpan);
                 Destroy(impactEffectPS, 1);
             }
         }
@@ -91,6 +115,25 @@ public class PlayerWeapon : MonoBehaviour
     {
         readyToShoot = true;
     }
+    
+    public void StartAim()
+    {
+        //isAiming = true;
+        transform.localPosition = aimingPosition;
+        transform.localRotation = aimingRotation;
+        UI.ToggleCrosshair();
+        UI.ToggleRedDot();
+        
+    }
+
+    public void EndAim()
+    {
+        transform.localPosition = hipfirePosition;
+        transform.localRotation = hipfireRotation;
+        UI.ToggleCrosshair();
+        UI.ToggleRedDot();
+        //isAiming = false;
+    }
 
     public void Reload()
     {
@@ -102,19 +145,6 @@ public class PlayerWeapon : MonoBehaviour
     {
         ammoLeft = magSize;
         reloading = false;
-    }
-    private Vector3 GetDirection()
-    {
-        Vector3 direction = gunBarrel.transform.forward;
-
-        direction += new Vector3(
-            Random.Range(-bulletSpread.x, bulletSpread.x),
-            Random.Range(-bulletSpread.y, bulletSpread.y),
-            Random.Range(-bulletSpread.z, bulletSpread.z)
-        );
-
-        direction.Normalize();
-        return direction;
     }
     private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit Hit)
     {
@@ -134,4 +164,9 @@ public class PlayerWeapon : MonoBehaviour
         Destroy(Trail.gameObject, Trail.time);
     }
 
+    private void PlayWeaponFireSound()
+    {
+        AudioClip fire = fireSounds[Random.Range(0, fireSounds.Length)];
+        audioInCamera.PlayOneShot(fire);
+    }
 }

@@ -27,7 +27,8 @@ public class PlayerHealth : MonoBehaviour
         UpdateHealthUI();
         if(health <= 0)
         {
-            Debug.Log("Player Dead");
+            //change this asap
+            Application.Quit();
         }
         if(overlay.color.a > 0)
         {
