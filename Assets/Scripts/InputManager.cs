@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
     public PlayerInput.OnFootActions onFoot;
     private PlayerMotor motor;
     private PlayerLook look;
-    public PlayerWeapon playerWeapon;
+    private PlayerWeapon playerWeapon;
     // Start is called before the first frame update
     void Awake()
     {

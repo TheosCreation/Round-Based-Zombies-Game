@@ -10,11 +10,12 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 playerVelocity;
     public bool isGrounded;
     private bool isSprinting, isCrouching;
+    public bool isAiming;
     private bool lerpCrouch;
     private float crouchTimer;
     public float playerWalkSpeed = 4f;
     public float playerSprintSpeed = 20f;
-    private float speed = 4f;
+    public float speed = 4f;
     public float gravity = -9.81f;
     public float jumpHeight = 1.5f;
     public float sprintSpeedMultiplier = 1.5f;
@@ -95,7 +96,7 @@ public class PlayerMotor : MonoBehaviour
 
     public void StartSprint()
     {
-        if(!isCrouching)
+        if(!isCrouching && !isAiming)
         {
             isSprinting = true;
             speed = playerWalkSpeed * sprintSpeedMultiplier;
@@ -104,9 +105,8 @@ public class PlayerMotor : MonoBehaviour
 
     public void EndSprint()
     {
-        if(isSprinting)
+        if(isSprinting && !isCrouching && !isAiming)
             speed = playerWalkSpeed;
-        speed = playerWalkSpeed;
         isSprinting = false;
     }
 

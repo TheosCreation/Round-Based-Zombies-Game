@@ -11,6 +11,7 @@ public class PlayerWeapon : MonoBehaviour
     public ParticleSystem impactBloodEffect;
     public Camera cam;
     public PlayerPoints playerPoints;
+
     
     [Header("Weapon Values")]
     public Vector3 aimingPosition;
@@ -24,20 +25,26 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private bool isAutomatic;
     [SerializeField] private int magSize;
     [SerializeField] private float bulletDamage;
+    [SerializeField] private float headshotMultiplier;
     public int ammoLeft;
-    private bool isShooting, readyToShoot, reloading;//isAiming;
+    private bool isShooting, readyToShoot, reloading, isAiming, inAimingMode;
     private RaycastHit hit;
     [SerializeField] private GameObject bulletHolePrefab;
     [SerializeField] private GameObject MuzzleFlashPrefab;
     private float bulletHoleLifeSpan = 5.0f;
 
+    private Animator animator;
+    [SerializeField] private Animator armanimator;
+
      [Header("Audio")]
-    public AudioSource audioInCamera;
-    public AudioClip[] fireSounds;
+    [SerializeField] private AudioSource audioInCamera;
+    [SerializeField] private AudioClip reloadSound;
+    [SerializeField] private AudioClip[] fireSounds;
 
 
     void Awake()
     {
+        animator = GetComponent<Animator>();
         ammoLeft = magSize;
         readyToShoot = true;
     }
@@ -47,9 +54,18 @@ public class PlayerWeapon : MonoBehaviour
         if(isShooting && readyToShoot && !reloading && ammoLeft > 0)
         {
             PerformShot();
-        } else if(isShooting && ammoLeft <= 0 && !readyToShoot) 
+        } else if(isShooting && ammoLeft <= 0) 
         {
             Reload();
+        }
+
+        if (isAiming && !reloading && !inAimingMode)
+        {
+            playerPoints.GetComponent<PlayerMotor>().isAiming = true;
+            inAimingMode = true;
+            animator.SetBool("isAiming", true);
+            UI.ToggleCrosshair();
+            UI.ToggleRedDot();
         }
     }
 
@@ -82,12 +98,36 @@ public class PlayerWeapon : MonoBehaviour
             ZombieHealth target = hit.transform.GetComponent<ZombieHealth>();
             if(target != null)
             {
-                target.TakeDamage(bulletDamage);
-                ParticleSystem impactBloodEffectPS = Instantiate(impactBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impactBloodEffectPS, 1);
-                //award more points for headshot
+                if (hit.collider.gameObject.tag == "Head")
+                {
+                    if (target.health - (bulletDamage * headshotMultiplier) <= 0)
+                    {
+                        playerPoints.Points += 90;
+                    }
+                    target.TakeDamage(bulletDamage * headshotMultiplier);
+                }
+                if (hit.collider.gameObject.tag == "Torso")
+                {
+                    if (target.health - (bulletDamage) <= 0)
+                    {
+                        playerPoints.Points += 40;
+                    }
+                    target.TakeDamage(bulletDamage);
+                }
+                if (hit.collider.gameObject.tag == "Regular")
+                {
+                    if (target.health - (bulletDamage) <= 0)
+                    {
+                        playerPoints.Points += 30;
+                    }
+                    target.TakeDamage(bulletDamage);
+                }
+                //plus 10 for hit
                 playerPoints.Points += 10;
                 UI.UpdatePointsUI(playerPoints.Points);
+                //addes blood particles
+                ParticleSystem impactBloodEffectPS = Instantiate(impactBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactBloodEffectPS, 1);
             }
             else{
                 ParticleSystem impactEffectPS = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
@@ -118,31 +158,39 @@ public class PlayerWeapon : MonoBehaviour
     
     public void StartAim()
     {
-        //isAiming = true;
-        transform.localPosition = aimingPosition;
-        transform.localRotation = aimingRotation;
-        UI.ToggleCrosshair();
-        UI.ToggleRedDot();
+        isAiming = true;
         
     }
 
     public void EndAim()
     {
-        transform.localPosition = hipfirePosition;
-        transform.localRotation = hipfireRotation;
-        UI.ToggleCrosshair();
-        UI.ToggleRedDot();
-        //isAiming = false;
+        if(isAiming)
+        {
+            inAimingMode = false;
+            animator.SetBool("isAiming", false);
+            UI.ToggleCrosshair();
+            UI.ToggleRedDot();
+            isAiming = false;
+            playerPoints.GetComponent<PlayerMotor>().isAiming = false;
+        }
     }
 
     public void Reload()
     {
-        reloading = true;
-        Invoke("ReloadFinish", reloadTime);
+        if(!reloading && ammoLeft < magSize && !isAiming)
+        {
+            reloading = true;
+            audioInCamera.PlayOneShot(reloadSound);
+            armanimator.SetBool("isReloading", true);
+            animator.SetBool("isReloading", true);
+            Invoke("ReloadFinish", reloadTime);
+        }
     }
 
     public void ReloadFinish()
     {
+        armanimator.SetBool("isReloading", false);
+        animator.SetBool("isReloading", false);
         ammoLeft = magSize;
         reloading = false;
     }
