@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ZombieHealth : MonoBehaviour
 {
-    private float health;
-    public float maxHealth = 100;
+    public float health;
+    public float maxHealth;
+    [SerializeField] private RoundSpawner roundSpawner;
+
     // Start is called before the first frame update
     void Start()
     {

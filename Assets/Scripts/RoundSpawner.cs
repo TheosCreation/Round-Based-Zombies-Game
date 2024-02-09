@@ -13,24 +13,32 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField] private int baseZombies = 8;
     //starts at 1 zombie per 2 seconds and at round 60 max cap of 10 zombies per second so zombiesPerSecond = 10 at round 60 and zombiesPerSecond = 5 at round 30
     [SerializeField] private float zombiesPerSecond = 0.5f;
+    [SerializeField] private float initialRoundStartTime;
+    [SerializeField] private float timeBetweenRounds;
+    [SerializeField] private float healthIncreaseMultiplier = 1.1f;
 
-    [SerializeField] private float timeBetweenRounds = 4f;
-    [SerializeField] private float difficultyScalingFactor = 0.75f;
 
     [Header("Audio")]
     public AudioSource audioInCamera;
-    public AudioClip changeRoundSound;
+    public AudioClip roundStartClip;
+    public AudioClip roundEndClip;
 
     [Header("Events")]
     public static UnityEvent onZombieKilled = new UnityEvent();
 
     public int currentRound = 1;
+    private float timeToStartRound;
     private float timeSinceLastSpawn;
     private int zombiesAlive;
     private int zombiesLeftToSpawn;
-    private int maxZombiesAllowedAlive;
     private int maxZombiesThisRound;
+    private int zombiesAllowedAlive;
+    private int baseZombiesAllowedAlive = 24;
+    private int zombiesCurrentHealth = 50;
     private bool isSpawning = false;
+
+
+
     void Awake()
     {
         onZombieKilled.AddListener(ZombieKilled);
@@ -38,7 +46,11 @@ public class RoundSpawner : MonoBehaviour
     void Start()
     {
         playerUI.GetComponent<PlayerUI>();
+        zombiesLeftToSpawn = baseZombies;
+        //play start round sound
+        timeToStartRound = initialRoundStartTime;
         StartCoroutine(StartRound());
+        timeToStartRound = timeBetweenRounds;
     }
 
     void Update()
@@ -48,8 +60,7 @@ public class RoundSpawner : MonoBehaviour
             return;
         }            
         timeSinceLastSpawn += Time.deltaTime;
-        
-        if(timeSinceLastSpawn >= (1f / zombiesPerSecond) && zombiesLeftToSpawn > 0 && zombiesAlive <= maxZombiesAllowedAlive)
+        if (timeSinceLastSpawn >= (1f / zombiesPerSecond) && zombiesLeftToSpawn > 0 && zombiesAlive < zombiesAllowedAlive)
         {
             SpawnZombie();
             zombiesAlive++;
@@ -64,33 +75,96 @@ public class RoundSpawner : MonoBehaviour
     }
     private void ZombieKilled()
     {
-        playerPoints.Points += 30;
         playerUI.UpdatePointsUI(playerPoints.Points);
         zombiesAlive--;
     }
 
     private IEnumerator StartRound()
     {
-        yield return new WaitForSeconds(timeBetweenRounds);
-        //spawn the round counter on screen and then display in top left corner of screen
-        if(currentRound == 1)
-        {
-            playerUI.FirstRoundAlert();
-        }
-        else{
-            playerUI.UpdateRoundUI(currentRound);
-        }
-        isSpawning = true;
-        zombiesLeftToSpawn = ZombiesPerRound();
+        yield return new WaitForSeconds(timeToStartRound);
+        audioInCamera.PlayOneShot(roundStartClip);
+        //update round count text
+        playerUI.UpdateRoundUI(currentRound);
+
         maxZombiesThisRound = zombiesLeftToSpawn;
-        ZombiesPerSecond();
-        maxZombiesAllowedAlive = MaxZombiesAllowedAlive();
+        zombiesPerSecond = CalculateZombieRate(currentRound);
+        if(currentRound == 2)
+        {
+            zombiesLeftToSpawn = 8;
+        }
+        if(currentRound == 3)
+        {
+            zombiesLeftToSpawn = 13;
+        }
+        if(currentRound == 4)
+        {
+            zombiesLeftToSpawn = 18;
+        }
+        if(currentRound == 5)
+        {
+            zombiesLeftToSpawn = 24;
+        }
+        if(currentRound == 6)
+        {
+            zombiesLeftToSpawn = 27;
+        }
+        if(currentRound == 7)
+        {
+            zombiesLeftToSpawn = 28;
+        }
+        if (currentRound == 9)
+        {
+            zombiesLeftToSpawn = 29;
+        }
+        if (currentRound == 10)
+        {
+            zombiesLeftToSpawn = 33;
+        }
+        if (currentRound == 11)
+        {
+            zombiesLeftToSpawn = 34;
+        }
+        if (currentRound == 12)
+        {
+            zombiesLeftToSpawn = 36;
+        }
+        if (currentRound <= 4)
+        {
+            zombiesAllowedAlive = Mathf.RoundToInt((float)((currentRound * 0.2) * baseZombiesAllowedAlive));
+        }
+        if(currentRound == 5)
+        {
+            zombiesAllowedAlive = baseZombiesAllowedAlive;
+        }
+        if (currentRound >= 10)
+        {
+            zombiesAllowedAlive = Mathf.RoundToInt(currentRound * (3 / 20) * baseZombiesAllowedAlive);
+        }
+        if (currentRound > 12)
+        {
+            zombiesLeftToSpawn = ZombiesPerRoundAfterRound12();
+        }
+        if (currentRound <= 9)
+        {
+            zombiesCurrentHealth += 100;
+        }
+        else
+        {
+            zombiesCurrentHealth = Mathf.RoundToInt(zombiesCurrentHealth * healthIncreaseMultiplier);
+        }
+        StartCoroutine(StartSpawning());
+    }
+
+    private IEnumerator StartSpawning()
+    {
+        yield return new WaitForSeconds(2*initialRoundStartTime);
+        isSpawning = true;
     }
 
     private void EndRound()
     {
         //play sound to let player know round has ended
-        audioInCamera.PlayOneShot(changeRoundSound);
+        audioInCamera.PlayOneShot(roundEndClip);
         isSpawning = false;
         timeSinceLastSpawn = 0;
         currentRound++;
@@ -100,23 +174,29 @@ public class RoundSpawner : MonoBehaviour
     private void SpawnZombie()
     {
         GameObject prefabToSpawn = zombiePrefabs[0];
-        //spawn position is a random location relevant to the player
+        prefabToSpawn.GetComponent<ZombieHealth>().maxHealth = zombiesCurrentHealth;
+
+        //REVIST THIS PLEASE NOT WORKING
         Vector3 spawnPosition = new Vector3(Mathf.Clamp(player.transform.position.x + Random.Range(-15,15), -50, 50), 1, Mathf.Clamp(player.transform.position.z + Random.Range(-15,15), -50, 50));
         Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
     }
 
-    private int ZombiesPerRound()
+    private int ZombiesPerRoundAfterRound12()
     {
-        return Mathf.RoundToInt(baseZombies * Mathf.Pow(currentRound, difficultyScalingFactor));
+        return Mathf.RoundToInt((float)(0.08685 * Mathf.Pow(currentRound, 2) + (0.1954 * currentRound) + 22.05));
     }
 
-    private int MaxZombiesAllowedAlive()
+    private float CalculateZombieRate(float roundCount)
     {
-        return 2 * currentRound + 2;
+        float[] coefficients = { -1.48970867e-05f, 1.98093085e-03f, -1.00859166e-01f, 2.09316232f };
+        float zombieRate = 0f;
+
+        for (int i = 0; i < coefficients.Length; i++)
+        {
+            zombieRate += coefficients[i] * Mathf.Pow(roundCount, coefficients.Length - 1 - i);
+        }
+
+        return 1/zombieRate;
     }
 
-    private void ZombiesPerSecond()
-    {
-        zombiesPerSecond = (1f/6f *  currentRound) + 1f/3f;
-    }
 }

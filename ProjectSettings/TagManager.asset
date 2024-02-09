@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Crosshair
+  - Head
+  - Torso
+  - Regular
   layers:
   - Default
   - TransparentFX

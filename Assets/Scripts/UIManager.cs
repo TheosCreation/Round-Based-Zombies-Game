@@ -12,13 +12,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private PlayerWeapon Weapon;
     private float displayTimer = 0f;
     private float timeToDisplay = 3.5f;
-    private bool displayActive = false;
+    private bool displayActive = true;
     private bool displayedRound1 = false;
     private bool crosshairToggle  = true;
     private bool redDotToggle = false;
     void Start()
     {
-        FirstRoundDisplay.text = "";
+        FirstRoundDisplay.text = "Round 1";
         RoundText.text = "";
         PointsText.text = "0";
         FirstRoundDisplay.enableWordWrapping = true;
@@ -41,12 +41,6 @@ public class UIManager : MonoBehaviour
                 displayedRound1 = true;
             }
         }
-    }
-
-    public void FirstRoundAlert()
-    {
-        displayActive = true;
-        FirstRoundDisplay.text = "Round 1";
     }
 
     public void UpdateRoundUI(int Round)
