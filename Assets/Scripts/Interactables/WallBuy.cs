@@ -12,7 +12,7 @@ public class WallBuy : Interactable
     {
         weaponCostString = weaponPrefab.GetComponent<PlayerWeapon>().weaponCost.ToString();
         replenshCostString = weaponPrefab.GetComponent<PlayerWeapon>().replenshCost.ToString();
-        promptMessage = "Refull Ammo " + replenshCostString;
+        promptMessage = "Refill Ammo " + replenshCostString;
     }
     protected override void Interact()
     {
