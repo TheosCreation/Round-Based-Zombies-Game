@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,9 +8,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI RoundText;
     [SerializeField] private TextMeshProUGUI PointsText;
     [SerializeField] private TextMeshProUGUI AmmoLeftText;
+    [SerializeField] private TextMeshProUGUI AmmoReserverText;
     [SerializeField] private GameObject Crosshair;
     [SerializeField] private GameObject RedDot;
-    [SerializeField] private PlayerWeapon Weapon;
     private float displayTimer = 0f;
     private float timeToDisplay = 3.5f;
     private bool displayActive = true;
@@ -25,7 +26,6 @@ public class UIManager : MonoBehaviour
     }
     void Update()
     {
-        UpdateAmmoUI();
         if(displayActive)
         {
             displayTimer += Time.deltaTime;
@@ -53,9 +53,15 @@ public class UIManager : MonoBehaviour
         PointsText.text = Points.ToString();
     }
 
-    public void UpdateAmmoUI()
+    public void UpdateAmmoUI(string AmmoCount)
     {
-        AmmoLeftText.text = Weapon.ammoLeft.ToString();
+        AmmoLeftText.text = AmmoCount;
+    }
+
+
+    public void UpdateAmmoReserveUI(string AmmoReserve)
+    {
+        AmmoReserverText.text = AmmoReserve;
     }
 
 
@@ -70,5 +76,5 @@ public class UIManager : MonoBehaviour
         redDotToggle = !redDotToggle;
         RedDot.SetActive(redDotToggle);
     }
-    
+
 }

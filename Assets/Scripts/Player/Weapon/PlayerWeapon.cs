@@ -11,6 +11,7 @@ public class PlayerWeapon : MonoBehaviour
     public ParticleSystem impactBloodEffect;
     public Camera cam;
     public PlayerPoints playerPoints;
+    private PackAPunch packAPunch;
 
     
     [Header("Weapon Values")]
@@ -24,10 +25,14 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private float fireRate, reloadTime;
     [SerializeField] private bool isAutomatic;
     [SerializeField] private int magSize;
+    [SerializeField] private int magsToStart;
+    public int weaponCost, replenshCost;
+    public int ammoReserve;
+    public int ammoLeft;
     [SerializeField] private float bulletDamage;
     [SerializeField] private float headshotMultiplier;
-    public int ammoLeft;
     private bool isShooting, readyToShoot, reloading, isAiming, inAimingMode;
+    private int currentPapTier;
     private RaycastHit hit;
     [SerializeField] private GameObject bulletHolePrefab;
     [SerializeField] private GameObject MuzzleFlashPrefab;
@@ -45,8 +50,15 @@ public class PlayerWeapon : MonoBehaviour
     void Awake()
     {
         animator = GetComponent<Animator>();
+        packAPunch = GetComponent<PackAPunch>();
         ammoLeft = magSize;
+        ammoReserve = magSize * magsToStart;
         readyToShoot = true;
+    }
+    void Start()
+    {
+        UI.UpdateAmmoUI(ammoLeft.ToString());
+        UI.UpdateAmmoReserveUI(ammoReserve.ToString());
     }
 
     void Update()
@@ -54,7 +66,7 @@ public class PlayerWeapon : MonoBehaviour
         if(isShooting && readyToShoot && !reloading && ammoLeft > 0)
         {
             PerformShot();
-        } else if(isShooting && ammoLeft <= 0) 
+        } else if(isShooting && ammoLeft <= 0 && ammoReserve > 0) 
         {
             Reload();
         }
@@ -79,6 +91,21 @@ public class PlayerWeapon : MonoBehaviour
         isShooting = false;
     }
 
+    public void UpdateWeaponStats()
+    {
+        //if increase in PAP Tier apply weapon changes
+        if(packAPunch.papTier > currentPapTier)
+        {
+            currentPapTier = packAPunch.papTier;
+            bulletDamage *= packAPunch.papDamageChange;
+            magSize = Mathf.RoundToInt(magSize * packAPunch.papAmmoChange);
+            ammoLeft = magSize;
+            ammoReserve = magSize * magsToStart;
+            UI.UpdateAmmoUI(ammoLeft.ToString());
+            UI.UpdateAmmoReserveUI(ammoReserve.ToString());
+        }
+    }
+
     public void PerformShot()
     {
         readyToShoot = false;
@@ -89,8 +116,9 @@ public class PlayerWeapon : MonoBehaviour
         Destroy(muzzleFlash, 0.02f);
         
         PlayWeaponFireSound();
-        
-        if(Physics.Raycast(cam.transform.position, direction, out hit, bulletRange))
+
+
+        if (Physics.Raycast(cam.transform.position, direction, out hit, bulletRange))
         {
             //Debug.Log(hit.collider.gameObject.name);
             TrailRenderer trail = Instantiate(bulletTrail, gunBarrel.position, Quaternion.identity);
@@ -139,8 +167,9 @@ public class PlayerWeapon : MonoBehaviour
         }
 
         ammoLeft--;
+        UI.UpdateAmmoUI(ammoLeft.ToString());
 
-        if(ammoLeft >= 0)
+        if (ammoLeft >= 0)
         {
             Invoke("ResetShot", fireRate);
             
@@ -177,7 +206,7 @@ public class PlayerWeapon : MonoBehaviour
 
     public void Reload()
     {
-        if(!reloading && ammoLeft < magSize && !isAiming)
+        if(!reloading && ammoLeft < magSize && !isAiming && ammoReserve > 0)
         {
             reloading = true;
             audioInCamera.PlayOneShot(reloadSound);
@@ -189,10 +218,36 @@ public class PlayerWeapon : MonoBehaviour
 
     public void ReloadFinish()
     {
+        if (ammoReserve < magSize - ammoLeft)
+        {
+            ammoLeft = ammoLeft + ammoReserve;
+            ammoReserve = 0;
+        }
+        else
+        {
+            ammoReserve -= (magSize - ammoLeft);
+            ammoLeft = magSize;
+        }
+
         armanimator.SetBool("isReloading", false);
         animator.SetBool("isReloading", false);
-        ammoLeft = magSize;
+
+        UI.UpdateAmmoUI(ammoLeft.ToString());
+        UI.UpdateAmmoReserveUI(ammoReserve.ToString());
         reloading = false;
+    }
+
+    public void ReplenshAmmo()
+    {
+        if(playerPoints.Points > replenshCost && ammoReserve != magSize * magsToStart)
+        {
+            playerPoints.Points -= replenshCost;
+            ammoLeft = magSize;
+            ammoReserve = magSize * magsToStart;
+            UI.UpdatePointsUI(playerPoints.Points);
+            UI.UpdateAmmoUI(ammoLeft.ToString());
+            UI.UpdateAmmoReserveUI(ammoReserve.ToString());
+        }
     }
     private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit Hit)
     {

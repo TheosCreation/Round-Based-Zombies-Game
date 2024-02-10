@@ -130,15 +130,13 @@ public class RoundSpawner : MonoBehaviour
         }
         if (currentRound <= 4)
         {
-            zombiesAllowedAlive = Mathf.RoundToInt((float)((currentRound * 0.2) * baseZombiesAllowedAlive));
-        }
-        if(currentRound == 5)
+            zombiesAllowedAlive = Mathf.RoundToInt((float)((currentRound * 0.2f) * baseZombiesAllowedAlive));
+        }else if(currentRound == 5)
         {
             zombiesAllowedAlive = baseZombiesAllowedAlive;
-        }
-        if (currentRound >= 10)
+        }else if (currentRound >= 10)
         {
-            zombiesAllowedAlive = Mathf.RoundToInt(currentRound * (3 / 20) * baseZombiesAllowedAlive);
+            zombiesAllowedAlive = Mathf.RoundToInt((float)(currentRound * (0.15f) * baseZombiesAllowedAlive));
         }
         if (currentRound > 12)
         {
