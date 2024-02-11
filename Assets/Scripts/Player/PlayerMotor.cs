@@ -13,6 +13,7 @@ public class PlayerMotor : MonoBehaviour
     public bool isAiming;
     private bool lerpCrouch;
     private float crouchTimer;
+    private float playerHeight;
     public float playerWalkSpeed = 4f;
     public float playerSprintSpeed = 20f;
     public float speed = 4f;
@@ -23,6 +24,7 @@ public class PlayerMotor : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        playerHeight = controller.height;
     }
 
     // Update is called once per frame
@@ -36,11 +38,11 @@ public class PlayerMotor : MonoBehaviour
             p *= p;
             if(isCrouching)
             {
-                controller.height = Mathf.Lerp(controller.height, 1, p);
+                controller.height = Mathf.Lerp(controller.height, playerHeight/1.3f, p);
             }
             else 
             {
-                controller.height = Mathf.Lerp(controller.height, 2, p);
+                controller.height = Mathf.Lerp(controller.height, playerHeight, p);
             }
             
             if(p > 1)

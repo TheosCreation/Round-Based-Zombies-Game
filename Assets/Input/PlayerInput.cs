@@ -107,6 +107,51 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Melee"",
+                    ""type"": ""Button"",
+                    ""id"": ""235545d8-4067-4975-b70c-b41870fb50ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Weapon Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""f445e3ef-1771-46bb-b3e0-bba35e434c4a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Weapon Previous"",
+                    ""type"": ""Button"",
+                    ""id"": ""3acbbdc3-07f3-4240-8998-7e06b79d8c3a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Lethal"",
+                    ""type"": ""Button"",
+                    ""id"": ""98146821-58d0-4009-ac16-3253894aaf5c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Tactical"",
+                    ""type"": ""Button"",
+                    ""id"": ""d339bdf5-3656-439b-8d91-17fe2f24c897"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -311,7 +356,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8a8881a0-6333-4232-98a2-54ad676eabc6"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -393,6 +438,138 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69376260-3fb9-4586-872c-84ebcbb9a13b"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3858d76-5466-4261-8c00-deb436b13f86"",
+                    ""path"": ""<Mouse>/backButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15d4474c-0a29-4af5-93ad-0b130bd581be"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3dc64627-f5ce-494b-9846-5e23e8385b5d"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f96554da-5177-465d-bf5c-61d30a10410e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Weapon Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f6d06f5-2193-438b-b239-efb84977d5ef"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Weapon Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11d12c5f-32bf-4c82-b352-5a78fa6d6335"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Weapon Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb82b765-d380-447a-adc6-b5c240894802"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Weapon Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2bb92c24-a977-4d34-96c3-196d1c356014"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Lethal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""565d8ebd-ac3d-4d3d-b050-62af228678e4"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Lethal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f2311f2-4686-4bc1-9ece-4b9ece528433"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Tactical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed6a7fef-5a9d-4b1d-987f-50978a91da29"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Tactical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -928,6 +1105,11 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_OnFoot_Shoot = m_OnFoot.FindAction("Shoot", throwIfNotFound: true);
         m_OnFoot_Reload = m_OnFoot.FindAction("Reload", throwIfNotFound: true);
         m_OnFoot_Aim = m_OnFoot.FindAction("Aim", throwIfNotFound: true);
+        m_OnFoot_Melee = m_OnFoot.FindAction("Melee", throwIfNotFound: true);
+        m_OnFoot_WeaponNext = m_OnFoot.FindAction("Weapon Next", throwIfNotFound: true);
+        m_OnFoot_WeaponPrevious = m_OnFoot.FindAction("Weapon Previous", throwIfNotFound: true);
+        m_OnFoot_Lethal = m_OnFoot.FindAction("Lethal", throwIfNotFound: true);
+        m_OnFoot_Tactical = m_OnFoot.FindAction("Tactical", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1008,6 +1190,11 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Shoot;
     private readonly InputAction m_OnFoot_Reload;
     private readonly InputAction m_OnFoot_Aim;
+    private readonly InputAction m_OnFoot_Melee;
+    private readonly InputAction m_OnFoot_WeaponNext;
+    private readonly InputAction m_OnFoot_WeaponPrevious;
+    private readonly InputAction m_OnFoot_Lethal;
+    private readonly InputAction m_OnFoot_Tactical;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -1021,6 +1208,11 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_OnFoot_Shoot;
         public InputAction @Reload => m_Wrapper.m_OnFoot_Reload;
         public InputAction @Aim => m_Wrapper.m_OnFoot_Aim;
+        public InputAction @Melee => m_Wrapper.m_OnFoot_Melee;
+        public InputAction @WeaponNext => m_Wrapper.m_OnFoot_WeaponNext;
+        public InputAction @WeaponPrevious => m_Wrapper.m_OnFoot_WeaponPrevious;
+        public InputAction @Lethal => m_Wrapper.m_OnFoot_Lethal;
+        public InputAction @Tactical => m_Wrapper.m_OnFoot_Tactical;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1057,6 +1249,21 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Aim.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnAim;
+                @Melee.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnMelee;
+                @Melee.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnMelee;
+                @Melee.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnMelee;
+                @WeaponNext.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnWeaponNext;
+                @WeaponNext.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnWeaponNext;
+                @WeaponNext.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnWeaponNext;
+                @WeaponPrevious.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnWeaponPrevious;
+                @WeaponPrevious.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnWeaponPrevious;
+                @WeaponPrevious.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnWeaponPrevious;
+                @Lethal.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnLethal;
+                @Lethal.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnLethal;
+                @Lethal.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnLethal;
+                @Tactical.started -= m_Wrapper.m_OnFootActionsCallbackInterface.OnTactical;
+                @Tactical.performed -= m_Wrapper.m_OnFootActionsCallbackInterface.OnTactical;
+                @Tactical.canceled -= m_Wrapper.m_OnFootActionsCallbackInterface.OnTactical;
             }
             m_Wrapper.m_OnFootActionsCallbackInterface = instance;
             if (instance != null)
@@ -1088,6 +1295,21 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @Melee.started += instance.OnMelee;
+                @Melee.performed += instance.OnMelee;
+                @Melee.canceled += instance.OnMelee;
+                @WeaponNext.started += instance.OnWeaponNext;
+                @WeaponNext.performed += instance.OnWeaponNext;
+                @WeaponNext.canceled += instance.OnWeaponNext;
+                @WeaponPrevious.started += instance.OnWeaponPrevious;
+                @WeaponPrevious.performed += instance.OnWeaponPrevious;
+                @WeaponPrevious.canceled += instance.OnWeaponPrevious;
+                @Lethal.started += instance.OnLethal;
+                @Lethal.performed += instance.OnLethal;
+                @Lethal.canceled += instance.OnLethal;
+                @Tactical.started += instance.OnTactical;
+                @Tactical.performed += instance.OnTactical;
+                @Tactical.canceled += instance.OnTactical;
             }
         }
     }
@@ -1208,6 +1430,11 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnMelee(InputAction.CallbackContext context);
+        void OnWeaponNext(InputAction.CallbackContext context);
+        void OnWeaponPrevious(InputAction.CallbackContext context);
+        void OnLethal(InputAction.CallbackContext context);
+        void OnTactical(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -7,6 +7,9 @@ public class PlayerHealth : MonoBehaviour
 {
     private float health;
     public float maxHealth = 100;
+    public float healthRecoverAmmount = 10;
+    public float recoverTimer = 10;
+    private float timeSinceLastHurt;
     [Header("Damage Overlay")]
     public Image overlay;
     public float duration;
@@ -24,6 +27,16 @@ public class PlayerHealth : MonoBehaviour
     void Update()
     {
         health = Mathf.Clamp(health, 0, maxHealth);
+        if(health < maxHealth)
+        {
+            timeSinceLastHurt += Time.deltaTime;
+        }
+        if(timeSinceLastHurt >= recoverTimer)
+        {
+            RestoreHealth(healthRecoverAmmount);
+            Debug.Log("Health Rocovered " + health);
+            timeSinceLastHurt = 0;
+        }
         UpdateHealthUI();
         if(health <= 0)
         {
@@ -56,6 +69,7 @@ public class PlayerHealth : MonoBehaviour
     {
         health -= damage;
         durationTimer = 0;
+        timeSinceLastHurt = 0;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
     }
 

@@ -152,7 +152,7 @@ public class PlayerWeapon : MonoBehaviour
                 }
                 //plus 10 for hit
                 playerPoints.Points += 10;
-                UI.UpdatePointsUI(playerPoints.Points);
+                UI.UpdatePointsUI();
                 //addes blood particles
                 ParticleSystem impactBloodEffectPS = Instantiate(impactBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impactBloodEffectPS, 1);
@@ -188,7 +188,6 @@ public class PlayerWeapon : MonoBehaviour
     public void StartAim()
     {
         isAiming = true;
-        
     }
 
     public void EndAim()
@@ -244,7 +243,7 @@ public class PlayerWeapon : MonoBehaviour
             playerPoints.Points -= replenshCost;
             ammoLeft = magSize;
             ammoReserve = magSize * magsToStart;
-            UI.UpdatePointsUI(playerPoints.Points);
+            UI.UpdatePointsUI();
             UI.UpdateAmmoUI(ammoLeft.ToString());
             UI.UpdateAmmoReserveUI(ammoReserve.ToString());
         }

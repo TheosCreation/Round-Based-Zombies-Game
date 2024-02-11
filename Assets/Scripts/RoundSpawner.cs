@@ -11,6 +11,7 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField] private GameObject[] zombiePrefabs;
     [SerializeField] private UIManager playerUI;
     [SerializeField] private PlayerPoints playerPoints;
+    [SerializeField] private Vector3[] spawnAroundPoints;
     [SerializeField] private int baseZombies = 8;
     //starts at 1 zombie per 2 seconds and at round 60 max cap of 10 zombies per second so zombiesPerSecond = 10 at round 60 and zombiesPerSecond = 5 at round 30
     [SerializeField] private float zombiesPerSecond = 0.5f;
@@ -50,6 +51,7 @@ public class RoundSpawner : MonoBehaviour
     void Start()
     {
         playerUI.GetComponent<PlayerUI>();
+
         zombiesLeftToSpawn = baseZombies;
         //play start round sound
         timeToStartRound = initialRoundStartTime;
@@ -79,13 +81,14 @@ public class RoundSpawner : MonoBehaviour
     }
     private void ZombieKilled()
     {
-        playerUI.UpdatePointsUI(playerPoints.Points);
+        playerUI.UpdatePointsUI();
         zombiesAlive--;
     }
 
     private IEnumerator StartRound()
     {
         yield return new WaitForSeconds(timeToStartRound);
+
         audioInCamera.PlayOneShot(roundStartClip);
         //update round count text
         playerUI.UpdateRoundUI(currentRound);
@@ -148,15 +151,19 @@ public class RoundSpawner : MonoBehaviour
         {
             zombiesLeftToSpawn = ZombiesPerRoundAfterRound12();
         }
-        if (currentRound <= 9 && currentRound > 1)
+        if(currentRound > 1)
         {
-            zombiesCurrentHealth += 100;
-            zombiesMoveSpeed += zombiesMoveSpeedAdd;
+            if (currentRound <= 9)
+            {
+                zombiesCurrentHealth += 100;
+                zombiesMoveSpeed += zombiesMoveSpeedAdd;
+            }
+            else
+            {
+                zombiesCurrentHealth = Mathf.RoundToInt(zombiesCurrentHealth * healthIncreaseMultiplier);
+            }
         }
-        else
-        {
-            zombiesCurrentHealth = Mathf.RoundToInt(zombiesCurrentHealth * healthIncreaseMultiplier);
-        }
+        
         maxZombiesThisRound = zombiesAllowedAlive;
         StartCoroutine(StartSpawning());
     }
@@ -182,9 +189,10 @@ public class RoundSpawner : MonoBehaviour
         GameObject prefabToSpawn = zombiePrefabs[0];
         prefabToSpawn.GetComponent<ZombieHealth>().maxHealth = zombiesCurrentHealth;
         prefabToSpawn.GetComponent<NavMeshAgent>().speed = zombiesMoveSpeed;
+        Vector3 spawnPositionSelected = spawnAroundPoints[Random.Range(0, spawnAroundPoints.Length)];
 
         //REVIST THIS PLEASE NOT WORKING
-        Vector3 spawnPosition = new Vector3(Mathf.Clamp(player.transform.position.x + Random.Range(-15,15), -50, 50), 1, Mathf.Clamp(player.transform.position.z + Random.Range(-15,15), -50, 50));
+        Vector3 spawnPosition = new Vector3(spawnPositionSelected.x + Random.Range(-4, 4), 1, spawnPositionSelected.z + Random.Range(-4, 4));
         Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
     }
     

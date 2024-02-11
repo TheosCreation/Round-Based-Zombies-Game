@@ -46,7 +46,7 @@ public class Door : Interactable
                 if (nearestPlayerPoints.Points >= doorCost)
                 {
                     nearestPlayerPoints.Points -= doorCost;
-                    nearestPlayer.GetComponentInChildren<UIManager>().UpdatePointsUI(nearestPlayerPoints.Points);
+                    nearestPlayer.GetComponentInChildren<UIManager>().UpdatePointsUI();
                     doorOpen = true;
                     GetComponent<Animator>().SetBool("IsOpen", doorOpen);
                     GetComponent<NavMeshObstacle>().enabled = false;

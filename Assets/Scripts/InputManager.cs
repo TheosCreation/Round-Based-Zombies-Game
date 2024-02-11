@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     private PlayerMotor motor;
     private PlayerLook look;
     private PlayerWeapon playerWeapon;
+    private PlayerMelee playerMelee;
     // Start is called before the first frame update
     void Awake()
     {
@@ -22,6 +23,7 @@ public class InputManager : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
         playerWeapon = GetComponentInChildren<PlayerWeapon>();
+        playerMelee = GetComponentInChildren<PlayerMelee>();
 
         //Player Motor
         onFoot.Jump.performed += ctx => motor.Jump();
@@ -30,7 +32,9 @@ public class InputManager : MonoBehaviour
         onFoot.Sprint.started += ctx => motor.StartSprint();
         onFoot.Sprint.canceled += ctx => motor.EndSprint();
 
-        //Player Wepon
+        //Player Melee
+        onFoot.Melee.performed += ctx => playerMelee.Melee();
+        //Player Weapon
         onFoot.Shoot.started += ctx => playerWeapon.StartShot();
         onFoot.Shoot.canceled += ctx => playerWeapon.EndShot();
 

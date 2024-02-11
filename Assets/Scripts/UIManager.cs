@@ -17,11 +17,13 @@ public class UIManager : MonoBehaviour
     private bool displayedRound1 = false;
     private bool crosshairToggle  = true;
     private bool redDotToggle = false;
+    private PlayerPoints playerPoints;
     void Start()
     {
+        playerPoints = GetComponentInParent<PlayerPoints>();
         FirstRoundDisplay.text = "Round 1";
         RoundText.text = "";
-        PointsText.text = "0";
+        PointsText.text = "500";
         FirstRoundDisplay.enableWordWrapping = true;
     }
     void Update()
@@ -48,9 +50,9 @@ public class UIManager : MonoBehaviour
         displayActive = true;
         RoundText.text = Round.ToString();
     }
-    public void UpdatePointsUI(int Points)
+    public void UpdatePointsUI()
     {
-        PointsText.text = Points.ToString();
+        PointsText.text = playerPoints.Points.ToString();
     }
 
     public void UpdateAmmoUI(string AmmoCount)

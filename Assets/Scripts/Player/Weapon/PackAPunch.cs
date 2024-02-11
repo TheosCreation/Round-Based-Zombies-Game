@@ -23,7 +23,7 @@ public class PackAPunch : MonoBehaviour
         {
             papTier++;
             playerPoints.Points-= papCost;
-            UI.UpdatePointsUI(playerPoints.Points);
+            UI.UpdatePointsUI();
             GetComponent<PlayerWeapon>().UpdateWeaponStats();
         }
         Debug.Log("Pap level" + papTier);
