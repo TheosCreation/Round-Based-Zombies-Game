@@ -19,6 +19,7 @@ public class PlayerWeapon : MonoBehaviour
     public Quaternion aimingRotation;
     public Vector3 hipfirePosition;
     public Quaternion hipfireRotation;
+    [SerializeField] private PlayerMelee knife;
     [SerializeField] private Transform gunBarrel;
     [SerializeField] private TrailRenderer bulletTrail;
     [SerializeField] private float bulletRange;
@@ -63,21 +64,25 @@ public class PlayerWeapon : MonoBehaviour
 
     void Update()
     {
-        if(isShooting && readyToShoot && !reloading && ammoLeft > 0)
+        if(isShooting && readyToShoot && !reloading && ammoLeft > 0 && !knife.isMeleeing)
         {
             PerformShot();
-        } else if(isShooting && ammoLeft <= 0 && ammoReserve > 0) 
+        } else if(isShooting && ammoLeft <= 0 && ammoReserve > 0 && !knife.isMeleeing) 
         {
             Reload();
         }
 
-        if (isAiming && !reloading && !inAimingMode)
+        if (isAiming && !reloading && !inAimingMode && !knife.isMeleeing)
         {
             playerPoints.GetComponent<PlayerMotor>().isAiming = true;
             inAimingMode = true;
             animator.SetBool("isAiming", true);
             UI.ToggleCrosshair();
             UI.ToggleRedDot();
+        }
+        if(knife.isMeleeing)
+        {
+            EndAim();
         }
     }
 
@@ -208,6 +213,7 @@ public class PlayerWeapon : MonoBehaviour
         if(!reloading && ammoLeft < magSize && !isAiming && ammoReserve > 0)
         {
             reloading = true;
+            knife.canMelee = false;
             audioInCamera.PlayOneShot(reloadSound);
             armanimator.SetBool("isReloading", true);
             animator.SetBool("isReloading", true);
@@ -234,6 +240,7 @@ public class PlayerWeapon : MonoBehaviour
         UI.UpdateAmmoUI(ammoLeft.ToString());
         UI.UpdateAmmoReserveUI(ammoReserve.ToString());
         reloading = false;
+        knife.canMelee = true;
     }
 
     public void ReplenshAmmo()

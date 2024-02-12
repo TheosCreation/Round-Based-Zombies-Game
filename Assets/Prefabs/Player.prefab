@@ -163,12 +163,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 48078541}
   m_LocalRotation: {x: 0.11452378, y: 0.012672955, z: 0.109253995, w: 0.9873132}
-  m_LocalPosition: {x: -0.468, y: -0.296, z: -0.1789999}
-  m_LocalScale: {x: 0.1, y: 0.5, z: 0.1}
+  m_LocalPosition: {x: -0.174, y: -0.8, z: -0.1789999}
+  m_LocalScale: {x: 0.09999999, y: 0.5, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6850150792607115518}
-  m_RootOrder: 2
+  m_Father: {fileID: 6733477103275880729}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 12.907, y: 2.943, z: 12.962}
 --- !u!33 &48078544
 MeshFilter:
@@ -247,6 +247,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeDamage: 150
   meleeDistance: 2
+  meleeCooldown: 0
+  canMelee: 1
   UI: {fileID: 1179395338}
   playerPoints: {fileID: 8576480384806725693}
 --- !u!1 &778870581
@@ -1358,7 +1360,6 @@ Transform:
   m_Children:
   - {fileID: 6733477103275880729}
   - {fileID: 1179395337}
-  - {fileID: 48078545}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1685,6 +1686,7 @@ Transform:
   - {fileID: 8576480384783754599}
   - {fileID: 8576480385641363754}
   - {fileID: 6733477103320795532}
+  - {fileID: 48078545}
   m_Father: {fileID: 6850150792607115518}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

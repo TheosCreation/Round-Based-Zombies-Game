@@ -10,18 +10,23 @@ public class PlayerMelee : MonoBehaviour
     public float meleeDamage;
     public float meleeDistance;
     public float meleeCooldown;
+    public float meleeDuration;
     public bool canMelee = true;
+    public bool isMeleeing;
 
     private Camera cam;
     private InputManager inputManager;
     [SerializeField] private UIManager UI;
     [SerializeField] private PlayerPoints playerPoints;
     private float timeSinceLastMelee;
+    private Animator animator;
+    [SerializeField] private Animator armanimator;
 
     void Start()
     {
         cam = GetComponentInParent<PlayerLook>().cam;
         inputManager = GetComponentInParent<InputManager>();
+        animator = GetComponent<Animator>();
     }
     void Update()
     {
@@ -34,6 +39,13 @@ public class PlayerMelee : MonoBehaviour
             canMelee = true;
             timeSinceLastMelee = 0;
         }
+
+        if (timeSinceLastMelee >= meleeDuration)
+        {
+            isMeleeing = false;
+            animator.SetBool("isMelee", isMeleeing);
+            armanimator.SetBool("isMelee", isMeleeing);
+        }
     }
 
     public void Melee()
@@ -41,6 +53,9 @@ public class PlayerMelee : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if(canMelee)
         {
+            isMeleeing = true;
+            animator.SetBool("isMelee", isMeleeing);
+            armanimator.SetBool("isMelee", isMeleeing);
             canMelee = false;
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, meleeDistance))
