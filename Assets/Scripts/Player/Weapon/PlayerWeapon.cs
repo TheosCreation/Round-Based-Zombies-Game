@@ -32,7 +32,7 @@ public class PlayerWeapon : MonoBehaviour
     public int ammoLeft;
     [SerializeField] private float bulletDamage;
     [SerializeField] private float headshotMultiplier;
-    private bool isShooting, readyToShoot, reloading, isAiming, inAimingMode;
+    private bool isShooting, readyToShoot, reloading, isAiming, inAimingMode, cancelReload;
     private int currentPapTier;
     private RaycastHit hit;
     [SerializeField] private GameObject bulletHolePrefab;
@@ -43,7 +43,8 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private Animator armanimator;
 
      [Header("Audio")]
-    [SerializeField] private AudioSource audioInCamera;
+    [SerializeField] private AudioSource weaponSource;
+    [SerializeField] private AudioSource reloadSource;
     [SerializeField] private AudioClip reloadSound;
     [SerializeField] private AudioClip[] fireSounds;
 
@@ -72,7 +73,7 @@ public class PlayerWeapon : MonoBehaviour
             Reload();
         }
 
-        if (isAiming && !reloading && !inAimingMode && !knife.isMeleeing)
+        if (isAiming && !reloading && !inAimingMode)
         {
             playerPoints.GetComponent<PlayerMotor>().isAiming = true;
             inAimingMode = true;
@@ -80,9 +81,9 @@ public class PlayerWeapon : MonoBehaviour
             UI.ToggleCrosshair();
             UI.ToggleRedDot();
         }
-        if(knife.isMeleeing)
+        if(knife.isMeleeing && reloading)
         {
-            EndAim();
+            ReloadCancel();
         }
     }
 
@@ -121,7 +122,7 @@ public class PlayerWeapon : MonoBehaviour
         Destroy(muzzleFlash, 0.02f);
         
         PlayWeaponFireSound();
-
+        playerPoints.GetComponent<PlayerMotor>().CancelSprint();
 
         if (Physics.Raycast(cam.transform.position, direction, out hit, bulletRange))
         {
@@ -193,6 +194,7 @@ public class PlayerWeapon : MonoBehaviour
     public void StartAim()
     {
         isAiming = true;
+        playerPoints.GetComponent<PlayerMotor>().CancelSprint();
     }
 
     public void EndAim()
@@ -213,34 +215,45 @@ public class PlayerWeapon : MonoBehaviour
         if(!reloading && ammoLeft < magSize && !isAiming && ammoReserve > 0)
         {
             reloading = true;
-            knife.canMelee = false;
-            audioInCamera.PlayOneShot(reloadSound);
+            reloadSource.PlayOneShot(reloadSound);
             armanimator.SetBool("isReloading", true);
             animator.SetBool("isReloading", true);
+            playerPoints.GetComponent<PlayerMotor>().CancelSprint();
             Invoke("ReloadFinish", reloadTime);
         }
+    }
+    public void ReloadCancel()
+    {
+        reloadSource.Stop();
+        reloading = false;
+        cancelReload = true;
+        armanimator.SetBool("isReloading", false);
+        animator.SetBool("isReloading", false);
     }
 
     public void ReloadFinish()
     {
-        if (ammoReserve < magSize - ammoLeft)
+        if (!cancelReload)
         {
-            ammoLeft = ammoLeft + ammoReserve;
-            ammoReserve = 0;
-        }
-        else
-        {
-            ammoReserve -= (magSize - ammoLeft);
-            ammoLeft = magSize;
-        }
+            if (ammoReserve < magSize - ammoLeft)
+            {
+                ammoLeft = ammoLeft + ammoReserve;
+                ammoReserve = 0;
+            }
+            else
+            {
+                ammoReserve -= (magSize - ammoLeft);
+                ammoLeft = magSize;
+            }
 
-        armanimator.SetBool("isReloading", false);
-        animator.SetBool("isReloading", false);
+            armanimator.SetBool("isReloading", false);
+            animator.SetBool("isReloading", false);
 
-        UI.UpdateAmmoUI(ammoLeft.ToString());
-        UI.UpdateAmmoReserveUI(ammoReserve.ToString());
-        reloading = false;
-        knife.canMelee = true;
+            UI.UpdateAmmoUI(ammoLeft.ToString());
+            UI.UpdateAmmoReserveUI(ammoReserve.ToString());
+            reloading = false;
+        }
+        cancelReload = false;
     }
 
     public void ReplenshAmmo()
@@ -276,6 +289,6 @@ public class PlayerWeapon : MonoBehaviour
     private void PlayWeaponFireSound()
     {
         AudioClip fire = fireSounds[Random.Range(0, fireSounds.Length)];
-        audioInCamera.PlayOneShot(fire);
+        weaponSource.PlayOneShot(fire);
     }
 }

@@ -7,9 +7,10 @@ using UnityEngine;
 public class PlayerMotor : MonoBehaviour
 {
     public CharacterController controller;
+    public PlayerWeapon playerWeapon;
     private Vector3 playerVelocity;
     public bool isGrounded;
-    private bool isSprinting, isCrouching;
+    public bool isSprinting, isCrouching, sprintCancel;
     public bool isAiming;
     private bool lerpCrouch;
     private float crouchTimer;
@@ -100,16 +101,25 @@ public class PlayerMotor : MonoBehaviour
     {
         if(!isCrouching && !isAiming)
         {
+            playerWeapon.ReloadCancel();
             isSprinting = true;
             speed = playerWalkSpeed * sprintSpeedMultiplier;
         }
     }
 
+    public void CancelSprint()
+    {
+        sprintCancel = true;
+        speed = playerWalkSpeed;
+        isSprinting = false;
+    }
+    
     public void EndSprint()
     {
-        if(isSprinting && !isCrouching && !isAiming)
+        if(isSprinting && !isCrouching && !isAiming && !sprintCancel)
             speed = playerWalkSpeed;
         isSprinting = false;
+        sprintCancel = false;
     }
 
     public void PerformSprint()

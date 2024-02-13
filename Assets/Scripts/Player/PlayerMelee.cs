@@ -18,6 +18,7 @@ public class PlayerMelee : MonoBehaviour
     private InputManager inputManager;
     [SerializeField] private UIManager UI;
     [SerializeField] private PlayerPoints playerPoints;
+    [SerializeField] private GameObject playerWeapon;
     private float timeSinceLastMelee;
     private Animator animator;
     [SerializeField] private Animator armanimator;
@@ -45,6 +46,7 @@ public class PlayerMelee : MonoBehaviour
             isMeleeing = false;
             animator.SetBool("isMelee", isMeleeing);
             armanimator.SetBool("isMelee", isMeleeing);
+            playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = true;
         }
     }
 
@@ -53,6 +55,8 @@ public class PlayerMelee : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if(canMelee)
         {
+            playerPoints.GetComponent<PlayerMotor>().CancelSprint();
+            playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = false;
             isMeleeing = true;
             animator.SetBool("isMelee", isMeleeing);
             armanimator.SetBool("isMelee", isMeleeing);
@@ -67,6 +71,7 @@ public class PlayerMelee : MonoBehaviour
                     {
                         playerPoints.Points += 130;
                     }
+
                     target.TakeDamage(meleeDamage);
                     //plus 10 for hit
                     playerPoints.Points += 10;
