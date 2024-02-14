@@ -139,6 +139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol
       objectReference: {fileID: 0}
+    - target: {fileID: 1363253329119804976, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: m_TagString
+      value: Pistol
+      objectReference: {fileID: 0}
     - target: {fileID: 1435978971381815416, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.06299999
@@ -236,6 +240,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6563826020895174177, guid: 32108d8838361cc40bf339542a355bf1, type: 3}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: magSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: fireRate
       value: 0.15
       objectReference: {fileID: 0}
@@ -246,6 +254,10 @@ PrefabInstance:
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: reloadTime
       value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: weaponCost
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: armanimator
@@ -263,6 +275,14 @@ PrefabInstance:
       propertyPath: bulletTrail
       value: 
       objectReference: {fileID: 328621789431213768, guid: 43559d27d223bf340b413fde1315c256, type: 3}
+    - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: isAutomatic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: magsToStart
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: muzzleFlash
       value: 
@@ -282,6 +302,10 @@ PrefabInstance:
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: playerPoints
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: replenshCost
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: audioInCamera

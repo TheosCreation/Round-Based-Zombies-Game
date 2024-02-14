@@ -10,6 +10,9 @@ TagManager:
   - Torso
   - Regular
   - Weapon
+  - Pistol
+  - Rifle
+  - WallBuy
   layers:
   - Default
   - TransparentFX

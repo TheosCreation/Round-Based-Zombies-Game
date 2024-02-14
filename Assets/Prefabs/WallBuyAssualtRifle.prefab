@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4048543096191412467}
   m_Layer: 6
   m_Name: WallBuyAssualtRifle
-  m_TagString: Untagged
+  m_TagString: WallBuy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

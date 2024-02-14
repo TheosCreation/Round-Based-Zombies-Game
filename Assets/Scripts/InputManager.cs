@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
     public PlayerInput.OnFootActions onFoot;
     private PlayerMotor motor;
     private PlayerLook look;
-    private PlayerWeapon playerWeapon;
+    private WeaponActions weaponActions;
     private PlayerMelee playerMelee;
     private WeaponSwitching weaponSwitching;
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
 
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
-        playerWeapon = GetComponentInChildren<PlayerWeapon>();
+        weaponActions = GetComponent<WeaponActions>();
         playerMelee = GetComponentInChildren<PlayerMelee>();
         weaponSwitching = GetComponentInChildren<WeaponSwitching>();
 
@@ -37,13 +37,13 @@ public class InputManager : MonoBehaviour
         //Player Melee
         onFoot.Melee.performed += ctx => playerMelee.Melee();
         //Player Weapon
-        onFoot.Shoot.started += ctx => playerWeapon.StartShot();
-        onFoot.Shoot.canceled += ctx => playerWeapon.EndShot();
+        onFoot.Shoot.started += ctx => weaponActions.StartShot();
+        onFoot.Shoot.canceled += ctx => weaponActions.EndShot();
 
-        onFoot.Aim.started += ctx => playerWeapon.StartAim();
-        onFoot.Aim.canceled += ctx => playerWeapon.EndAim();
+        onFoot.Aim.started += ctx => weaponActions.StartAim();
+        onFoot.Aim.canceled += ctx => weaponActions.EndAim();
 
-        onFoot.Reload.performed += ctx => playerWeapon.Reload();
+        onFoot.Reload.performed += ctx => weaponActions.Reload();
 
         //onFoot.WeaponNext.performed += ctx => weaponSwitching.WeaponNext();
         onFoot.WeaponPrevious.performed += ctx => weaponSwitching.WeaponPrevious();

@@ -1478,6 +1478,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1386828449972134048}
+  - component: {fileID: 79546485}
   m_Layer: 0
   m_Name: WeaponHolder
   m_TagString: Untagged
@@ -1498,10 +1499,25 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6733477103320795532}
-  - {fileID: 7988887527345978417}
+  - {fileID: 7590593734491494512}
   m_Father: {fileID: 6733477103275880729}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &79546485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5443226804600593891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279144b67c4d21a41a9c2b9a0ad9b742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedWeapon: 0
+  playerWeapon: {fileID: 6733477103320795529}
+  playerStateMachine: {fileID: 3060155022287811675}
 --- !u!1 &6563826020895174177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,6 +1538,7 @@ GameObject:
   - component: {fileID: 8576480384801068495}
   - component: {fileID: 8576480384806725693}
   - component: {fileID: 3060155022287811675}
+  - component: {fileID: 1651498673746211539}
   - component: {fileID: 1471706936650673986}
   m_Layer: 0
   m_Name: Player
@@ -1746,6 +1763,18 @@ MonoBehaviour:
   isAiming: 0
   inAimingMode: 0
   cancelReload: 0
+--- !u!114 &1651498673746211539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563826020895174177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7405beb7e02506a45a3fc3637c64699a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &1471706936650673986
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1758,7 +1787,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2273,7 +2302,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1001 &6555855219022481902
+--- !u!1001 &6733477101733899695
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2283,7 +2312,7 @@ PrefabInstance:
     - target: {fileID: 2881394232485696536, guid: 554041f3fd851444c9f8157c6bc1a0a3, type: 3}
       propertyPath: Player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6563826020895174177}
     - target: {fileID: 3757455056442013151, guid: 554041f3fd851444c9f8157c6bc1a0a3, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2330,12 +2359,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6755205832120276002, guid: 554041f3fd851444c9f8157c6bc1a0a3, type: 3}
       propertyPath: m_Name
-      value: Pistol
+      value: Pistol (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 554041f3fd851444c9f8157c6bc1a0a3, type: 3}
---- !u!4 &7988887527345978417 stripped
+--- !u!4 &7590593734491494512 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3757455056442013151, guid: 554041f3fd851444c9f8157c6bc1a0a3, type: 3}
-  m_PrefabInstance: {fileID: 6555855219022481902}
+  m_PrefabInstance: {fileID: 6733477101733899695}
   m_PrefabAsset: {fileID: 0}
