@@ -5,21 +5,20 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    //implement hipfire spread and use isaiming to ignore spread
-    public UIManager UI;
-    public ParticleSystem impactEffect;
-    public ParticleSystem impactBloodEffect;
-    public Camera cam;
-    public PlayerPoints playerPoints;
-    private PackAPunch packAPunch;
+    public GameObject Player;
+    private PlayerStateMachine playerStateMachine;
+    private UIManager PlayerUI;
+    private Camera cam;
+    private PlayerPoints playerPoints;
+    private PlayerMotor playerMotor;
 
-    
+    //implement hipfire spread and use isaiming to ignore spread
     [Header("Weapon Values")]
+    private PackAPunch packAPunch;
     public Vector3 aimingPosition;
     public Quaternion aimingRotation;
     public Vector3 hipfirePosition;
     public Quaternion hipfireRotation;
-    [SerializeField] private PlayerMelee knife;
     [SerializeField] private Transform gunBarrel;
     [SerializeField] private TrailRenderer bulletTrail;
     [SerializeField] private float bulletRange;
@@ -32,56 +31,66 @@ public class PlayerWeapon : MonoBehaviour
     public int ammoLeft;
     [SerializeField] private float bulletDamage;
     [SerializeField] private float headshotMultiplier;
-    private bool isShooting, readyToShoot, reloading, isAiming, inAimingMode, cancelReload;
+    private bool readyToShoot, inAimingMode;
     private int currentPapTier;
     private RaycastHit hit;
     [SerializeField] private GameObject bulletHolePrefab;
     [SerializeField] private GameObject MuzzleFlashPrefab;
+    public ParticleSystem impactEffect;
+    public ParticleSystem impactBloodEffect;
     private float bulletHoleLifeSpan = 5.0f;
 
     private Animator animator;
-    [SerializeField] private Animator armanimator;
+    private Animator armanimator;
 
      [Header("Audio")]
-    [SerializeField] private AudioSource weaponSource;
-    [SerializeField] private AudioSource reloadSource;
+    private AudioSource weaponSource;
+    private AudioSource reloadSource;
     [SerializeField] private AudioClip reloadSound;
     [SerializeField] private AudioClip[] fireSounds;
 
 
     void Awake()
     {
+        armanimator = Player.GetComponentInChildren<Animator>();
+        playerStateMachine = Player.GetComponent<PlayerStateMachine>();
+        PlayerUI = Player.GetComponentInChildren<UIManager>();
+        cam = Player.GetComponentInChildren<Camera>();
+        playerPoints = Player.GetComponent<PlayerPoints>();
+        playerMotor = Player.GetComponent<PlayerMotor>();
         animator = GetComponent<Animator>();
         packAPunch = GetComponent<PackAPunch>();
         ammoLeft = magSize;
         ammoReserve = magSize * magsToStart;
         readyToShoot = true;
+        PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
+        PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
+        weaponSource = Player.GetComponent<AudioSource>();
+        reloadSource = GetComponentInChildren<AudioSource>();
     }
     void Start()
     {
-        UI.UpdateAmmoUI(ammoLeft.ToString());
-        UI.UpdateAmmoReserveUI(ammoReserve.ToString());
     }
 
     void Update()
     {
-        if(isShooting && readyToShoot && !reloading && ammoLeft > 0 && !knife.isMeleeing)
+        if(playerStateMachine.isShooting && readyToShoot && !playerStateMachine.isReloading && ammoLeft > 0 && !playerStateMachine.isMeleeing)
         {
             PerformShot();
-        } else if(isShooting && ammoLeft <= 0 && ammoReserve > 0 && !knife.isMeleeing) 
+        } else if(playerStateMachine.isShooting && ammoLeft <= 0 && ammoReserve > 0 && !playerStateMachine.isMeleeing) 
         {
             Reload();
         }
 
-        if (isAiming && !reloading && !inAimingMode)
+        if (playerStateMachine.isAiming && !playerStateMachine.isReloading && !inAimingMode)
         {
-            playerPoints.GetComponent<PlayerMotor>().isAiming = true;
+            playerStateMachine.isAiming = true;
             inAimingMode = true;
             animator.SetBool("isAiming", true);
-            UI.ToggleCrosshair();
-            UI.ToggleRedDot();
+            PlayerUI.ToggleCrosshair();
+            PlayerUI.ToggleRedDot();
         }
-        if(knife.isMeleeing && reloading)
+        if(playerStateMachine.isMeleeing && playerStateMachine.isReloading)
         {
             ReloadCancel();
         }
@@ -89,12 +98,13 @@ public class PlayerWeapon : MonoBehaviour
 
     public void StartShot()
     {
-        isShooting = true;
+        playerStateMachine.isShooting = true;
     }
 
     public void EndShot()
     {
-        isShooting = false;
+        playerStateMachine.isShooting = false;
+        playerStateMachine.cancelSprint = false;
     }
 
     public void UpdateWeaponStats()
@@ -107,8 +117,8 @@ public class PlayerWeapon : MonoBehaviour
             magSize = Mathf.RoundToInt(magSize * packAPunch.papAmmoChange);
             ammoLeft = magSize;
             ammoReserve = magSize * magsToStart;
-            UI.UpdateAmmoUI(ammoLeft.ToString());
-            UI.UpdateAmmoReserveUI(ammoReserve.ToString());
+            PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
+            PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
         }
     }
 
@@ -122,7 +132,7 @@ public class PlayerWeapon : MonoBehaviour
         Destroy(muzzleFlash, 0.02f);
         
         PlayWeaponFireSound();
-        playerPoints.GetComponent<PlayerMotor>().CancelSprint();
+        playerMotor.CancelSprint();
 
         if (Physics.Raycast(cam.transform.position, direction, out hit, bulletRange))
         {
@@ -158,7 +168,7 @@ public class PlayerWeapon : MonoBehaviour
                 }
                 //plus 10 for hit
                 playerPoints.Points += 10;
-                UI.UpdatePointsUI();
+                PlayerUI.UpdatePointsUI();
                 //addes blood particles
                 ParticleSystem impactBloodEffectPS = Instantiate(impactBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impactBloodEffectPS, 1);
@@ -173,7 +183,7 @@ public class PlayerWeapon : MonoBehaviour
         }
 
         ammoLeft--;
-        UI.UpdateAmmoUI(ammoLeft.ToString());
+        PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
 
         if (ammoLeft >= 0)
         {
@@ -193,47 +203,48 @@ public class PlayerWeapon : MonoBehaviour
     
     public void StartAim()
     {
-        isAiming = true;
-        playerPoints.GetComponent<PlayerMotor>().CancelSprint();
+        playerStateMachine.isAiming = true;
+        playerMotor.CancelSprint();
     }
 
     public void EndAim()
     {
-        if(isAiming)
+        if(playerStateMachine.isAiming)
         {
             inAimingMode = false;
             animator.SetBool("isAiming", false);
-            UI.ToggleCrosshair();
-            UI.ToggleRedDot();
-            isAiming = false;
-            playerPoints.GetComponent<PlayerMotor>().isAiming = false;
+            PlayerUI.ToggleCrosshair();
+            PlayerUI.ToggleRedDot();
+            playerStateMachine.isAiming = false;
+            playerStateMachine.isAiming = false;
+            playerStateMachine.cancelSprint = false;
         }
     }
 
     public void Reload()
     {
-        if(!reloading && ammoLeft < magSize && !isAiming && ammoReserve > 0)
+        if(!playerStateMachine.isReloading && ammoLeft < magSize && !playerStateMachine.isAiming && ammoReserve > 0)
         {
-            reloading = true;
+            playerStateMachine.isReloading = true;
             reloadSource.PlayOneShot(reloadSound);
             armanimator.SetBool("isReloading", true);
             animator.SetBool("isReloading", true);
-            playerPoints.GetComponent<PlayerMotor>().CancelSprint();
+            playerMotor.CancelSprint();
             Invoke("ReloadFinish", reloadTime);
         }
     }
     public void ReloadCancel()
     {
         reloadSource.Stop();
-        reloading = false;
-        cancelReload = true;
+        playerStateMachine.isReloading = false;
+        playerStateMachine.cancelReload = true;
         armanimator.SetBool("isReloading", false);
         animator.SetBool("isReloading", false);
     }
 
     public void ReloadFinish()
     {
-        if (!cancelReload)
+        if (!playerStateMachine.cancelReload)
         {
             if (ammoReserve < magSize - ammoLeft)
             {
@@ -249,23 +260,23 @@ public class PlayerWeapon : MonoBehaviour
             armanimator.SetBool("isReloading", false);
             animator.SetBool("isReloading", false);
 
-            UI.UpdateAmmoUI(ammoLeft.ToString());
-            UI.UpdateAmmoReserveUI(ammoReserve.ToString());
-            reloading = false;
+            PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
+            PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
+            playerStateMachine.isReloading = false;
         }
-        cancelReload = false;
+        playerStateMachine.cancelSprint = false;
     }
 
     public void ReplenshAmmo()
     {
-        if(playerPoints.Points > replenshCost && ammoReserve != magSize * magsToStart)
+        if(ammoReserve != magSize * magsToStart)
         {
             playerPoints.Points -= replenshCost;
             ammoLeft = magSize;
             ammoReserve = magSize * magsToStart;
-            UI.UpdatePointsUI();
-            UI.UpdateAmmoUI(ammoLeft.ToString());
-            UI.UpdateAmmoReserveUI(ammoReserve.ToString());
+            PlayerUI.UpdatePointsUI();
+            PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
+            PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
         }
     }
     private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit Hit)

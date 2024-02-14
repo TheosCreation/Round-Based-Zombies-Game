@@ -9,6 +9,7 @@ TagManager:
   - Head
   - Torso
   - Regular
+  - Weapon
   layers:
   - Default
   - TransparentFX

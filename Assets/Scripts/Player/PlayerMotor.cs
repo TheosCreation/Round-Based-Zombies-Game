@@ -1,17 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMotor : MonoBehaviour
 {
+    private PlayerStateMachine playerStateMachine;
+
     public CharacterController controller;
     public PlayerWeapon playerWeapon;
     private Vector3 playerVelocity;
-    public bool isGrounded;
-    public bool isSprinting, isCrouching, sprintCancel;
-    public bool isAiming;
     private bool lerpCrouch;
     private float crouchTimer;
     private float playerHeight;
@@ -24,6 +19,7 @@ public class PlayerMotor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerStateMachine = GetComponent<PlayerStateMachine>();
         controller = GetComponent<CharacterController>();
         playerHeight = controller.height;
     }
@@ -31,13 +27,13 @@ public class PlayerMotor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = controller.isGrounded;
+        playerStateMachine.isGrounded = controller.isGrounded;
         if(lerpCrouch)
         {
             crouchTimer += Time.deltaTime;
             float p = crouchTimer / 1;
             p *= p;
-            if(isCrouching)
+            if(playerStateMachine.isCrouching)
             {
                 controller.height = Mathf.Lerp(controller.height, playerHeight/1.3f, p);
             }
@@ -61,17 +57,16 @@ public class PlayerMotor : MonoBehaviour
         moveDirection.z = input.y;
         controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
         playerVelocity.y += gravity * Time.deltaTime;
-        if(isGrounded && playerVelocity.y < 0)
+        if(playerStateMachine.isGrounded && playerVelocity.y < 0)
         {
             playerVelocity.y = -2;
         }
         controller.Move(playerVelocity * Time.deltaTime);
-        //Debug.Log(playerVelocity.y);
     }
 
     public void Jump()
     {
-        if(isGrounded) 
+        if(playerStateMachine.isGrounded) 
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
         }
@@ -79,47 +74,47 @@ public class PlayerMotor : MonoBehaviour
 
     public void StartCrouch()
     {
-        if(!isSprinting)
+        if(!playerStateMachine.isSprinting)
         {
             crouchTimer = 0;
             lerpCrouch = true;
             speed = playerWalkSpeed/2;
-            isCrouching = true;
+            playerStateMachine.isCrouching = true;
         }
     }
 
     public void EndCrouch()
     {
-        if(isCrouching)
+        if(playerStateMachine.isCrouching)
             speed = playerWalkSpeed;
             crouchTimer = 0;
             lerpCrouch = true;
-        isCrouching = false;
+        playerStateMachine.isCrouching = false;
     }
 
     public void StartSprint()
     {
-        if(!isCrouching && !isAiming)
+        if(!playerStateMachine.isCrouching && !playerStateMachine.isAiming)
         {
             playerWeapon.ReloadCancel();
-            isSprinting = true;
+            playerStateMachine.isSprinting = true;
             speed = playerWalkSpeed * sprintSpeedMultiplier;
         }
     }
 
     public void CancelSprint()
     {
-        sprintCancel = true;
+        playerStateMachine.cancelSprint = true;
         speed = playerWalkSpeed;
-        isSprinting = false;
+        playerStateMachine.isSprinting = false;
     }
     
     public void EndSprint()
     {
-        if(isSprinting && !isCrouching && !isAiming && !sprintCancel)
+        if(playerStateMachine.isSprinting && !playerStateMachine.isCrouching && !playerStateMachine.isAiming && !playerStateMachine.cancelSprint)
             speed = playerWalkSpeed;
-        isSprinting = false;
-        sprintCancel = false;
+        playerStateMachine.isSprinting = false;
+        playerStateMachine.cancelReload = false;
     }
 
     public void PerformSprint()

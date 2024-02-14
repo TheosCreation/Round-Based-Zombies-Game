@@ -1,51 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
-using UnityEngine.UI;
 
 public class PlayerMelee : MonoBehaviour
 {
+    [SerializeField] private GameObject Player;
+    private PlayerStateMachine playerStateMachine;
+    private UIManager PlayerUI;
+    private Camera cam;
+    private PlayerPoints playerPoints;
+    private PlayerMotor playerMotor;
+    private PlayerWeapon playerWeapon;
+
     public float meleeDamage;
     public float meleeDistance;
     public float meleeCooldown;
     public float meleeDuration;
-    public bool canMelee = true;
-    public bool isMeleeing;
 
-    private Camera cam;
     private InputManager inputManager;
-    [SerializeField] private UIManager UI;
-    [SerializeField] private PlayerPoints playerPoints;
-    [SerializeField] private GameObject playerWeapon;
     private float timeSinceLastMelee;
     private Animator animator;
     [SerializeField] private Animator armanimator;
 
     void Start()
     {
-        cam = GetComponentInParent<PlayerLook>().cam;
+        playerStateMachine = Player.GetComponent<PlayerStateMachine>();
+        PlayerUI = Player.GetComponentInChildren<UIManager>();
+        cam = Player.GetComponentInChildren<Camera>();
+        playerPoints = Player.GetComponent<PlayerPoints>();
+        playerMotor = Player.GetComponentInChildren<PlayerMotor>();
+        playerWeapon = Player.GetComponentInChildren<PlayerWeapon>();
         inputManager = GetComponentInParent<InputManager>();
         animator = GetComponent<Animator>();
     }
     void Update()
     {
-        if (!canMelee)
+        if (!playerStateMachine.canMelee)
         {
             timeSinceLastMelee += Time.deltaTime;
         }
         if (timeSinceLastMelee >= meleeCooldown)
         {
-            canMelee = true;
+            playerStateMachine.canMelee = true;
             timeSinceLastMelee = 0;
         }
 
         if (timeSinceLastMelee >= meleeDuration)
         {
-            isMeleeing = false;
-            animator.SetBool("isMelee", isMeleeing);
-            armanimator.SetBool("isMelee", isMeleeing);
+            playerStateMachine.isMeleeing = false;
+            animator.SetBool("isMelee", false);
+            armanimator.SetBool("isMelee", false);
             playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = true;
         }
     }
@@ -53,14 +55,15 @@ public class PlayerMelee : MonoBehaviour
     public void Melee()
     {
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        if(canMelee)
+        if(playerStateMachine.canMelee)
         {
-            playerPoints.GetComponent<PlayerMotor>().CancelSprint();
+            playerWeapon = Player.GetComponentInChildren<PlayerWeapon>();
+            playerMotor.CancelSprint();
             playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = false;
-            isMeleeing = true;
-            animator.SetBool("isMelee", isMeleeing);
-            armanimator.SetBool("isMelee", isMeleeing);
-            canMelee = false;
+            playerStateMachine.isMeleeing = true;
+            playerStateMachine.canMelee = false;
+            animator.SetBool("isMelee", true);
+            armanimator.SetBool("isMelee", true);
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, meleeDistance))
             {
@@ -75,7 +78,7 @@ public class PlayerMelee : MonoBehaviour
                     target.TakeDamage(meleeDamage);
                     //plus 10 for hit
                     playerPoints.Points += 10;
-                    UI.UpdatePointsUI();
+                    PlayerUI.UpdatePointsUI();
                 }
             }
         }

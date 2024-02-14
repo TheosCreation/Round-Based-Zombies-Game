@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     private PlayerLook look;
     private PlayerWeapon playerWeapon;
     private PlayerMelee playerMelee;
+    private WeaponSwitching weaponSwitching;
     // Start is called before the first frame update
     void Awake()
     {
@@ -24,6 +25,7 @@ public class InputManager : MonoBehaviour
         look = GetComponent<PlayerLook>();
         playerWeapon = GetComponentInChildren<PlayerWeapon>();
         playerMelee = GetComponentInChildren<PlayerMelee>();
+        weaponSwitching = GetComponentInChildren<WeaponSwitching>();
 
         //Player Motor
         onFoot.Jump.performed += ctx => motor.Jump();
@@ -42,6 +44,9 @@ public class InputManager : MonoBehaviour
         onFoot.Aim.canceled += ctx => playerWeapon.EndAim();
 
         onFoot.Reload.performed += ctx => playerWeapon.Reload();
+
+        //onFoot.WeaponNext.performed += ctx => weaponSwitching.WeaponNext();
+        onFoot.WeaponPrevious.performed += ctx => weaponSwitching.WeaponPrevious();
     }
 
     // Update is called once per frame

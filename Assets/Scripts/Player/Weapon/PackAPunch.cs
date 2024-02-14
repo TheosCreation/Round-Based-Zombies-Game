@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class PackAPunch : MonoBehaviour
 {
+    private PlayerPoints playerPoints;
+    private UIManager playerUI;
+
     private int papCost = 5000;
     public int papTier = 0;
     public int maxPapTier = 3;
     public float papDamageChange;
     public float papAmmoChange;
-    private PlayerPoints playerPoints;
-    [SerializeField] private UIManager UI;
 
-    void Start()
+    void Awake()
     {
         playerPoints = GetComponentInParent<PlayerPoints>();
+        playerUI = GetComponentInParent<UIManager>();
     }
 
     public void PAP()
@@ -23,7 +25,7 @@ public class PackAPunch : MonoBehaviour
         {
             papTier++;
             playerPoints.Points-= papCost;
-            UI.UpdatePointsUI();
+            playerUI.UpdatePointsUI();
             GetComponent<PlayerWeapon>().UpdateWeaponStats();
         }
         Debug.Log("Pap level" + papTier);

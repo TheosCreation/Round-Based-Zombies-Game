@@ -13,6 +13,7 @@ public class Door : Interactable
     private float nearestDistance = 10000;
     private bool doorOpen;
     [SerializeField] private int doorCost;
+    [SerializeField] private GameObject[] spawnBarriers;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +52,10 @@ public class Door : Interactable
                     GetComponent<Animator>().SetBool("IsOpen", doorOpen);
                     GetComponent<NavMeshObstacle>().enabled = false;
                     GetComponent<BoxCollider>().enabled = false;
+                    for(int i = 0; i < spawnBarriers.Length; i++)
+                    {
+                        spawnBarriers[i].SetActive(true);
+                    }
                 }
             }
         }
