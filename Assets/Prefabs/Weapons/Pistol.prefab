@@ -135,6 +135,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7802961151790449170, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: smooth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7802961151790449170, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: intensity
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1363253329119804976, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: m_Name
       value: Pistol
@@ -293,7 +301,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: cadba12fcfe555a489131b7baf8ccc2f, type: 3}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: bulletDamage
-      value: 40
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: impactEffect

@@ -5,7 +5,6 @@ public class PlayerMotor : MonoBehaviour
     private PlayerStateMachine playerStateMachine;
 
     public CharacterController controller;
-    public PlayerWeapon playerWeapon;
     private Vector3 playerVelocity;
     private bool lerpCrouch;
     private float crouchTimer;
@@ -96,7 +95,7 @@ public class PlayerMotor : MonoBehaviour
     {
         if(!playerStateMachine.isCrouching && !playerStateMachine.isAiming)
         {
-            playerWeapon.ReloadCancel();
+            GetComponentInChildren<WeaponSwitching>().playerWeapon.ReloadCancel();
             playerStateMachine.isSprinting = true;
             speed = playerWalkSpeed * sprintSpeedMultiplier;
         }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class WeaponSwitching : MonoBehaviour
 {
     public int selectedWeapon = 0;
+    public int maxWeaponCount = 0;
     public PlayerWeapon playerWeapon;
     public PlayerStateMachine playerStateMachine;
 
@@ -41,13 +42,12 @@ public class WeaponSwitching : MonoBehaviour
         {
             if(i == selectedWeapon)
             {
+                playerWeapon.ReloadCancel();
                 weapon.gameObject.SetActive(true);
                 playerWeapon = weapon.gameObject.GetComponent<PlayerWeapon>();
-                playerWeapon.ReloadCancel();
                 UIManager playerUI = playerWeapon.Player.GetComponentInChildren<UIManager>();
                 playerUI.UpdateAmmoUI(playerWeapon.ammoLeft.ToString());
                 playerUI.UpdateAmmoReserveUI(playerWeapon.ammoReserve.ToString());
-                playerWeapon.ReloadCancel();
                 playerStateMachine.cancelReload = false;
             }
             else

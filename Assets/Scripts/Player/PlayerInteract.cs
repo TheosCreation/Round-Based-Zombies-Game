@@ -36,13 +36,17 @@ public class PlayerInteract : MonoBehaviour
                 if(interactable.tag == "WallBuy")
                 {
                     WallBuy wallbuy = hitInfo.collider.GetComponent<WallBuy>();
-                    if (GetComponentInChildren<WeaponSwitching>().playerWeapon.tag != wallbuy.weaponPrefab.tag)
+                    PlayerWeapon playerWeapon = GetComponentInChildren<WeaponSwitching>().playerWeapon;
+                    if(playerWeapon != null)
                     {
-                        interactable.promptMessage = "Weapon Cost " + wallbuy.weaponCostString;
-                    }
-                    else
-                    {
-                        interactable.promptMessage = "Refill Ammo " + wallbuy.replenshCostString;
+                        if (playerWeapon.tag != wallbuy.weaponPrefab.tag)
+                        {
+                            interactable.promptMessage = "Weapon Cost " + wallbuy.weaponCost.ToString();
+                        }
+                        else
+                        {
+                            interactable.promptMessage = "Refill Ammo " + wallbuy.replenshCost.ToString();
+                        }
                     }
                     wallbuy.nearestPlayer = gameObject;
                 }

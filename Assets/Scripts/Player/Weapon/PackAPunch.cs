@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PackAPunch : MonoBehaviour
 {
-    private PlayerPoints playerPoints;
-    private UIManager playerUI;
-
+    private PlayerWeapon playerWeapon;
     private int papCost = 5000;
     public int papTier = 0;
     public int maxPapTier = 3;
@@ -15,19 +13,16 @@ public class PackAPunch : MonoBehaviour
 
     void Awake()
     {
-        playerPoints = GetComponentInParent<PlayerPoints>();
-        playerUI = GetComponentInParent<UIManager>();
+        playerWeapon = GetComponent<PlayerWeapon>();
     }
-
     public void PAP()
     {
-        if(papTier < maxPapTier && playerPoints.Points >= papCost)
+        if(papTier < maxPapTier && playerWeapon.Player.GetComponent<PlayerPoints>().Points >= papCost)
         {
             papTier++;
-            playerPoints.Points-= papCost;
-            playerUI.UpdatePointsUI();
-            GetComponent<PlayerWeapon>().UpdateWeaponStats();
+            playerWeapon.Player.GetComponent<PlayerPoints>().Points-= papCost;
+            playerWeapon.Player.GetComponentInChildren<UIManager>().UpdatePointsUI();
+            playerWeapon.UpdateWeaponStats();
         }
-        Debug.Log("Pap level" + papTier);
     }
 }

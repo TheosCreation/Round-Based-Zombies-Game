@@ -26,7 +26,6 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private bool isAutomatic;
     [SerializeField] private int magSize;
     [SerializeField] private int magsToStart;
-    public int weaponCost, replenshCost;
     public int ammoReserve;
     public int ammoLeft;
     [SerializeField] private float bulletDamage;
@@ -67,6 +66,7 @@ public class PlayerWeapon : MonoBehaviour
         PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
         weaponSource = Player.GetComponent<AudioSource>();
         reloadSource = GetComponentInChildren<AudioSource>();
+
     }
     void Start()
     {
@@ -267,7 +267,7 @@ public class PlayerWeapon : MonoBehaviour
         playerStateMachine.cancelSprint = false;
     }
 
-    public void ReplenshAmmo()
+    public void ReplenshAmmo(int replenshCost)
     {
         if(ammoReserve != magSize * magsToStart)
         {

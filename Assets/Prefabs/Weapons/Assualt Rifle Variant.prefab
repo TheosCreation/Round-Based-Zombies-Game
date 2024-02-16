@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7802961151790449170, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: smooth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7802961151790449170, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: intensity
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1363253329119804976, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: m_Name
       value: Assualt Rifle Variant
@@ -127,6 +135,10 @@ PrefabInstance:
       propertyPath: bulletTrail
       value: 
       objectReference: {fileID: 328621789431213768, guid: 43559d27d223bf340b413fde1315c256, type: 3}
+    - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
+      propertyPath: magsToStart
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7541476098950544906, guid: 4d9dc5ede8f84534ea72a5c65bafbdc9, type: 3}
       propertyPath: muzzleFlash
       value: 

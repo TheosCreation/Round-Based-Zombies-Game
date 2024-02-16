@@ -22,7 +22,7 @@ public class PackAPunchInteraction : Interactable
         //attempts to pack a punch
         if(nearestPlayer != null)
         {
-            nearestPlayer.GetComponentInChildren<PackAPunch>().PAP();
+            nearestPlayer.GetComponentInChildren<WeaponSwitching>().playerWeapon.GetComponent<PackAPunch>().PAP();
         }
     }
 }

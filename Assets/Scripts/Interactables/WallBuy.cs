@@ -7,35 +7,38 @@ public class WallBuy : Interactable
     private GameObject[] allPlayers;
     public GameObject nearestPlayer;
     public GameObject weaponPrefab;
-    private PlayerWeapon weapon;
+    private PlayerWeapon playerWeapon;
+    private WeaponSwitching weaponSwitcher;
+    private PlayerWeapon prefabWeapon;
     private PlayerMotor motor;
-    public string weaponCostString, replenshCostString;
+    public int weaponCost, replenshCost;
     void Start()
     {
-        weapon = weaponPrefab.GetComponent<PlayerWeapon>();
-        weaponCostString = weapon.weaponCost.ToString();
-        replenshCostString = weapon.replenshCost.ToString();
-        promptMessage = "Refill Ammo " + replenshCostString;
+        prefabWeapon = weaponPrefab.GetComponent<PlayerWeapon>();
+        promptMessage = "Refill Ammo " + replenshCost.ToString();
     }
     protected override void Interact()
     {
-        weapon = nearestPlayer.GetComponentInChildren<WeaponSwitching>().playerWeapon;
-        if (weapon.tag == weaponPrefab.tag)
+        weaponSwitcher = nearestPlayer.GetComponentInChildren<WeaponSwitching>();
+        playerWeapon = weaponSwitcher.playerWeapon;
+        if (playerWeapon.tag == weaponPrefab.tag)
         {
-            if(nearestPlayer.GetComponent<PlayerPoints>().Points >= weapon.replenshCost)
+            if(nearestPlayer.GetComponent<PlayerPoints>().Points >= replenshCost)
             {
-                weapon.ReplenshAmmo();
+                playerWeapon.ReplenshAmmo(replenshCost);
             }
         }
-        else if(nearestPlayer.GetComponentInChildren<PlayerPoints>().Points >= weapon.weaponCost)
+        else if(nearestPlayer.GetComponentInChildren<PlayerPoints>().Points >= weaponCost)
         {
-            //Creates new Weapon and Destroys Player Current One
+            //Destroys Player Current One then Creates new Weapon
+            if (weaponSwitcher.transform.childCount >= weaponSwitcher.maxWeaponCount)
+            {
+                Destroy(playerWeapon.GameObject());
+            }
             weaponPrefab.GetComponentInChildren<PlayerWeapon>().Player = nearestPlayer;
-            GameObject newWeapon = Instantiate(weaponPrefab, weapon.hipfirePosition, weapon.hipfireRotation);
-            newWeapon.transform.SetParent(nearestPlayer.GetComponentInChildren<PlayerWeapon>().transform);
-            motor = nearestPlayer.GetComponent<PlayerMotor>();
-            motor.playerWeapon = newWeapon.GetComponent<PlayerWeapon>();   
-            Destroy(nearestPlayer.GetComponentInChildren<PlayerWeapon>().GameObject());
+            GameObject newWeapon = Instantiate(weaponPrefab, prefabWeapon.hipfirePosition, prefabWeapon.hipfireRotation);
+            newWeapon.transform.parent = weaponSwitcher.transform;
+            weaponSwitcher.WeaponNext();
         }
     }
 }

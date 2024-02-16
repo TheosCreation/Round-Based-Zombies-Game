@@ -112,4 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useEvents: 0
   promptMessage: Invalid Script
+  nearestPlayer: {fileID: 0}
   weaponPrefab: {fileID: 6755205832120276002, guid: 9cc28ff3bd8b72a488b7d6d1dea061cc, type: 3}
+  weaponCost: 2000
+  replenshCost: 500
