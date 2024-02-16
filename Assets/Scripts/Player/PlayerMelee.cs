@@ -18,7 +18,6 @@ public class PlayerMelee : MonoBehaviour
     private InputManager inputManager;
     private float timeSinceLastMelee;
     private Animator animator;
-    [SerializeField] private Animator armanimator;
 
     void Start()
     {
@@ -47,8 +46,7 @@ public class PlayerMelee : MonoBehaviour
         {
             playerStateMachine.isMeleeing = false;
             animator.SetBool("isMelee", false);
-            armanimator.SetBool("isMelee", false);
-            playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = true;
+            //playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = true;
         }
     }
 
@@ -59,11 +57,10 @@ public class PlayerMelee : MonoBehaviour
         {
             playerWeapon = Player.GetComponentInChildren<PlayerWeapon>();
             playerMotor.CancelSprint();
-            playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = false;
+            //playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = false;
             playerStateMachine.isMeleeing = true;
             playerStateMachine.canMelee = false;
             animator.SetBool("isMelee", true);
-            armanimator.SetBool("isMelee", true);
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, meleeDistance))
             {

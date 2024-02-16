@@ -40,18 +40,18 @@ public class PlayerWeapon : MonoBehaviour
     private float bulletHoleLifeSpan = 5.0f;
 
     private Animator animator;
-    private Animator armanimator;
 
      [Header("Audio")]
     private AudioSource weaponSource;
     private AudioSource reloadSource;
     [SerializeField] private AudioClip reloadSound;
+    [SerializeField] private AudioClip emptySound;
+    private bool playedEmptySound;
     [SerializeField] private AudioClip[] fireSounds;
 
 
     void Awake()
     {
-        armanimator = Player.GetComponentInChildren<Animator>();
         playerStateMachine = Player.GetComponent<PlayerStateMachine>();
         PlayerUI = Player.GetComponentInChildren<UIManager>();
         cam = Player.GetComponentInChildren<Camera>();
@@ -79,10 +79,29 @@ public class PlayerWeapon : MonoBehaviour
             PerformShot();
         } else if(playerStateMachine.isShooting && ammoLeft <= 0 && ammoReserve > 0 && !playerStateMachine.isMeleeing) 
         {
+            animator.SetBool("isShooting", false);
             Reload();
         }
+        else if (playerStateMachine.isShooting && !playedEmptySound)
+        {
+            animator.SetBool("isShooting", false);
+            weaponSource.PlayOneShot(emptySound);
+            playedEmptySound = true;
+        }
+        if(ammoLeft <= 0 && ammoReserve > 0)
+        {
+            animator.SetBool("isEmpty", true);
+        }
+        else if(ammoLeft <= 0)
+        {
+            animator.SetBool("isEmpty", true);
+        }
+        else
+        {
+            animator.SetBool("isEmpty", false);
+        }
 
-        if (playerStateMachine.isAiming && !playerStateMachine.isReloading && !inAimingMode)
+        if (playerStateMachine.isAiming )
         {
             playerStateMachine.isAiming = true;
             inAimingMode = true;
@@ -105,6 +124,8 @@ public class PlayerWeapon : MonoBehaviour
     {
         playerStateMachine.isShooting = false;
         playerStateMachine.cancelSprint = false;
+        animator.SetBool("isShooting", false);
+        playedEmptySound = false;
     }
 
     public void UpdateWeaponStats()
@@ -124,6 +145,7 @@ public class PlayerWeapon : MonoBehaviour
 
     public void PerformShot()
     {
+        animator.SetBool("isShooting", true);
         readyToShoot = false;
         Vector3 direction = cam.transform.forward;
 
@@ -188,6 +210,7 @@ public class PlayerWeapon : MonoBehaviour
         if (ammoLeft >= 0)
         {
             Invoke("ResetShot", fireRate);
+
             
             if(!isAutomatic)
             {
@@ -227,7 +250,7 @@ public class PlayerWeapon : MonoBehaviour
         {
             playerStateMachine.isReloading = true;
             reloadSource.PlayOneShot(reloadSound);
-            armanimator.SetBool("isReloading", true);
+            animator.SetBool("isEmpty", false);
             animator.SetBool("isReloading", true);
             playerMotor.CancelSprint();
             Invoke("ReloadFinish", reloadTime);
@@ -238,7 +261,6 @@ public class PlayerWeapon : MonoBehaviour
         reloadSource.Stop();
         playerStateMachine.isReloading = false;
         playerStateMachine.cancelReload = true;
-        armanimator.SetBool("isReloading", false);
         animator.SetBool("isReloading", false);
     }
 
@@ -257,7 +279,6 @@ public class PlayerWeapon : MonoBehaviour
                 ammoLeft = magSize;
             }
 
-            armanimator.SetBool("isReloading", false);
             animator.SetBool("isReloading", false);
 
             PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
