@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class WallBuy : Interactable
 {
-    private GameObject[] allPlayers;
-    public GameObject nearestPlayer;
     public GameObject weaponPrefab;
     private PlayerWeapon playerWeapon;
     private WeaponSwitching weaponSwitcher;
     private PlayerWeapon prefabWeapon;
-    private PlayerMotor motor;
     public int weaponCost, replenshCost;
     void Start()
     {
@@ -38,6 +35,8 @@ public class WallBuy : Interactable
             weaponPrefab.GetComponentInChildren<PlayerWeapon>().Player = nearestPlayer;
             GameObject newWeapon = Instantiate(weaponPrefab, prefabWeapon.hipfirePosition, prefabWeapon.hipfireRotation);
             newWeapon.transform.parent = weaponSwitcher.transform;
+            newWeapon.transform.localPosition = prefabWeapon.hipfirePosition;
+            newWeapon.transform.localRotation = prefabWeapon.hipfireRotation;
             weaponSwitcher.WeaponNext();
         }
     }

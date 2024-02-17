@@ -10,9 +10,9 @@ TagManager:
   - Torso
   - Regular
   - Weapon
-  - Pistol
-  - Rifle
   - WallBuy
+  - Glock19
+  - AKM
   layers:
   - Default
   - TransparentFX

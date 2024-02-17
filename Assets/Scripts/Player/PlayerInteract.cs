@@ -48,8 +48,8 @@ public class PlayerInteract : MonoBehaviour
                             interactable.promptMessage = "Refill Ammo " + wallbuy.replenshCost.ToString();
                         }
                     }
-                    wallbuy.nearestPlayer = gameObject;
                 }
+                interactable.nearestPlayer = gameObject;
                 playerUI.UpdateText(interactable.promptMessage);
                 if(inputManager.onFoot.Interact.triggered)
                 {

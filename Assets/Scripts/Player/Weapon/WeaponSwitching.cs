@@ -9,6 +9,7 @@ public class WeaponSwitching : MonoBehaviour
 
     private void Start()
     {
+        playerWeapon = GetComponentInChildren<PlayerWeapon>();
         SelectWeapon();
     }
     public void WeaponNext()

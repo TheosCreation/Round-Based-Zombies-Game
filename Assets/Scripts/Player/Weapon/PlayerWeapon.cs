@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
@@ -11,6 +9,7 @@ public class PlayerWeapon : MonoBehaviour
     private Camera cam;
     private PlayerPoints playerPoints;
     private PlayerMotor playerMotor;
+    public LayerMask layersHit;
 
     //implement hipfire spread and use isaiming to ignore spread
     [Header("Weapon Values")]
@@ -79,20 +78,15 @@ public class PlayerWeapon : MonoBehaviour
             PerformShot();
         } else if(playerStateMachine.isShooting && ammoLeft <= 0 && ammoReserve > 0 && !playerStateMachine.isMeleeing) 
         {
-            animator.SetBool("isShooting", false);
             Reload();
         }
-        else if (playerStateMachine.isShooting && !playedEmptySound)
+        else if (playerStateMachine.isShooting && !playedEmptySound && ammoLeft <= 0 && ammoReserve <= 0)
         {
-            animator.SetBool("isShooting", false);
             weaponSource.PlayOneShot(emptySound);
             playedEmptySound = true;
-        }
-        if(ammoLeft <= 0 && ammoReserve > 0)
-        {
             animator.SetBool("isEmpty", true);
         }
-        else if(ammoLeft <= 0)
+        if(ammoLeft <= 0)
         {
             animator.SetBool("isEmpty", true);
         }
@@ -101,7 +95,7 @@ public class PlayerWeapon : MonoBehaviour
             animator.SetBool("isEmpty", false);
         }
 
-        if (playerStateMachine.isAiming )
+        if (playerStateMachine.isAiming && !inAimingMode)
         {
             playerStateMachine.isAiming = true;
             inAimingMode = true;
@@ -124,8 +118,8 @@ public class PlayerWeapon : MonoBehaviour
     {
         playerStateMachine.isShooting = false;
         playerStateMachine.cancelSprint = false;
-        animator.SetBool("isShooting", false);
         playedEmptySound = false;
+        animator.SetBool("isShooting", false);
     }
 
     public void UpdateWeaponStats()
@@ -156,7 +150,7 @@ public class PlayerWeapon : MonoBehaviour
         PlayWeaponFireSound();
         playerMotor.CancelSprint();
 
-        if (Physics.Raycast(cam.transform.position, direction, out hit, bulletRange))
+        if (Physics.Raycast(cam.transform.position, direction, out hit, Mathf.Infinity, layersHit))
         {
             //Debug.Log(hit.collider.gameObject.name);
             TrailRenderer trail = Instantiate(bulletTrail, gunBarrel.position, Quaternion.identity);
@@ -214,7 +208,7 @@ public class PlayerWeapon : MonoBehaviour
             
             if(!isAutomatic)
             {
-                EndShot();
+                Invoke("EndShot", fireRate);
             }
         }
     }
@@ -250,6 +244,7 @@ public class PlayerWeapon : MonoBehaviour
         {
             playerStateMachine.isReloading = true;
             reloadSource.PlayOneShot(reloadSound);
+            animator.SetBool("isShooting", false);
             animator.SetBool("isEmpty", false);
             animator.SetBool("isReloading", true);
             playerMotor.CancelSprint();
@@ -295,6 +290,7 @@ public class PlayerWeapon : MonoBehaviour
             playerPoints.Points -= replenshCost;
             ammoLeft = magSize;
             ammoReserve = magSize * magsToStart;
+            animator.SetBool("isEmpty", false);
             PlayerUI.UpdatePointsUI();
             PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
             PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
