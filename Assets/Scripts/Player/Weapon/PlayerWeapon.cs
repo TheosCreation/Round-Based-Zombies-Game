@@ -4,49 +4,49 @@ using UnityEngine;
 public class PlayerWeapon : MonoBehaviour
 {
     public GameObject Player;
-    private PlayerStateMachine playerStateMachine;
-    private UIManager PlayerUI;
-    private Camera cam;
-    private PlayerPoints playerPoints;
-    private PlayerMotor playerMotor;
+    protected PlayerStateMachine playerStateMachine;
+    protected UIManager PlayerUI;
+    protected Camera cam;
+    protected PlayerPoints playerPoints;
+    protected PlayerMotor playerMotor;
     public LayerMask layersHit;
 
     //implement hipfire spread and use isaiming to ignore spread
     [Header("Weapon Values")]
-    private PackAPunch packAPunch;
+    protected PackAPunch packAPunch;
     public Vector3 aimingPosition;
     public Quaternion aimingRotation;
     public Vector3 hipfirePosition;
     public Quaternion hipfireRotation;
-    [SerializeField] private Transform gunBarrel;
-    [SerializeField] private TrailRenderer bulletTrail;
-    [SerializeField] private float bulletRange;
-    [SerializeField] private float fireRate, reloadTime;
-    [SerializeField] private bool isAutomatic;
-    [SerializeField] private int magSize;
-    [SerializeField] private int magsToStart;
+    [SerializeField] protected Transform gunBarrel;
+    [SerializeField] protected TrailRenderer bulletTrail;
+    [SerializeField] protected float bulletRange;
+    [SerializeField] protected float fireRate, reloadTime;
+    [SerializeField] protected bool isAutomatic;
+    [SerializeField] protected int magSize;
+    [SerializeField] protected int magsToStart;
     public int ammoReserve;
     public int ammoLeft;
-    [SerializeField] private float bulletDamage;
-    [SerializeField] private float headshotMultiplier;
-    private bool readyToShoot, inAimingMode;
-    private int currentPapTier;
-    private RaycastHit hit;
-    [SerializeField] private GameObject bulletHolePrefab;
-    [SerializeField] private GameObject MuzzleFlashPrefab;
+    [SerializeField] protected float bulletDamage;
+    [SerializeField] protected float headshotMultiplier;
+    protected bool readyToShoot, inAimingMode;
+    protected int currentPapTier;
+    protected RaycastHit hit;
+    [SerializeField] protected GameObject bulletHolePrefab;
+    [SerializeField] protected GameObject MuzzleFlashPrefab;
     public ParticleSystem impactEffect;
     public ParticleSystem impactBloodEffect;
-    private float bulletHoleLifeSpan = 5.0f;
+    protected float bulletHoleLifeSpan = 5.0f;
 
-    private Animator animator;
+    protected Animator animator;
 
      [Header("Audio")]
-    private AudioSource weaponSource;
-    private AudioSource reloadSource;
-    [SerializeField] private AudioClip reloadSound;
-    [SerializeField] private AudioClip emptySound;
-    private bool playedEmptySound;
-    [SerializeField] private AudioClip[] fireSounds;
+    protected AudioSource weaponSource;
+    protected AudioSource reloadSource;
+    [SerializeField] protected AudioClip reloadSound;
+    [SerializeField] protected AudioClip emptySound;
+    protected bool playedEmptySound;
+    [SerializeField] protected AudioClip[] fireSounds;
 
 
     void Awake()
@@ -71,7 +71,7 @@ public class PlayerWeapon : MonoBehaviour
     {
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if(playerStateMachine.isShooting && readyToShoot && !playerStateMachine.isReloading && ammoLeft > 0 && !playerStateMachine.isMeleeing)
         {
@@ -245,7 +245,6 @@ public class PlayerWeapon : MonoBehaviour
             playerStateMachine.isReloading = true;
             reloadSource.PlayOneShot(reloadSound);
             animator.SetBool("isShooting", false);
-            animator.SetBool("isEmpty", false);
             animator.SetBool("isReloading", true);
             playerMotor.CancelSprint();
             Invoke("ReloadFinish", reloadTime);
@@ -259,7 +258,7 @@ public class PlayerWeapon : MonoBehaviour
         animator.SetBool("isReloading", false);
     }
 
-    public void ReloadFinish()
+    protected virtual void ReloadFinish()
     {
         if (!playerStateMachine.cancelReload)
         {
@@ -275,6 +274,7 @@ public class PlayerWeapon : MonoBehaviour
             }
 
             animator.SetBool("isReloading", false);
+            animator.SetBool("isEmpty", false);
 
             PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
             PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
