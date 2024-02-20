@@ -13,6 +13,7 @@ public class M1Garand : PlayerWeapon
         }
         else if (playerStateMachine.isShooting && ammoLeft <= 0 && ammoReserve > 0 && !playerStateMachine.isMeleeing)
         {
+            animator.SetBool("finishedClip", false);
             Reload();
         }
         else if (playerStateMachine.isShooting && !playedEmptySound && ammoLeft <= 0 && ammoReserve <= 0)
@@ -24,6 +25,7 @@ public class M1Garand : PlayerWeapon
         if(ammoLeft <= 0 && playerStateMachine.isShooting && !playedFinishSound)
         {
             weaponSource.PlayOneShot(finishClip);
+            animator.SetBool("finishedClip", true);
             playedFinishSound = true;
         }
         if (ammoLeft <= 0)
@@ -51,6 +53,7 @@ public class M1Garand : PlayerWeapon
     {
         if (!playerStateMachine.cancelReload)
         {
+            animator.SetBool("finishedClip", false);
             if (ammoReserve < magSize - ammoLeft)
             {
                 ammoLeft = ammoLeft + ammoReserve;
