@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PackAPunch : MonoBehaviour
@@ -17,10 +15,10 @@ public class PackAPunch : MonoBehaviour
     }
     public void PAP()
     {
-        if(papTier < maxPapTier && playerWeapon.Player.GetComponent<PlayerPoints>().Points >= papCost)
+        if(papTier < maxPapTier && playerWeapon.Player.GetComponent<Player>().Points >= papCost)
         {
             papTier++;
-            playerWeapon.Player.GetComponent<PlayerPoints>().Points-= papCost;
+            playerWeapon.Player.GetComponent<Player>().Points-= papCost;
             playerWeapon.Player.GetComponentInChildren<UIManager>().UpdatePointsUI();
             playerWeapon.UpdateWeaponStats();
         }

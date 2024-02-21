@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class InputManager : NetworkBehaviour
 {
     public PlayerInput playerInput;
     public PlayerInput.OnFootActions onFoot;
@@ -52,11 +50,19 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(!IsOwner)
+        {
+            return;
+        }
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
     }
 
     private void LateUpdate()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
     }
 

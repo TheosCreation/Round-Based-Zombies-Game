@@ -42,6 +42,6 @@ public class AttackState : BaseState
     {
         //play attack animation
         attackTimer = 0;
-        zombie.target.GetComponent<PlayerHealth>().TakeDamage(zombie.attackDamage);
+        zombie.target.GetComponent<Player>().TakeDamage(zombie.attackDamage);
     }
 }

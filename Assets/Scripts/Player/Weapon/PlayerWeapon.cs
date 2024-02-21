@@ -7,7 +7,7 @@ public class PlayerWeapon : MonoBehaviour
     protected PlayerStateMachine playerStateMachine;
     protected UIManager PlayerUI;
     protected Camera cam;
-    protected PlayerPoints playerPoints;
+    protected Player player;
     protected PlayerMotor playerMotor;
     public LayerMask layersHit;
 
@@ -54,7 +54,7 @@ public class PlayerWeapon : MonoBehaviour
         playerStateMachine = Player.GetComponent<PlayerStateMachine>();
         PlayerUI = Player.GetComponentInChildren<UIManager>();
         cam = Player.GetComponentInChildren<Camera>();
-        playerPoints = Player.GetComponent<PlayerPoints>();
+        player = Player.GetComponent<Player>();
         playerMotor = Player.GetComponent<PlayerMotor>();
         animator = GetComponent<Animator>();
         packAPunch = GetComponent<PackAPunch>();
@@ -162,7 +162,7 @@ public class PlayerWeapon : MonoBehaviour
                 {
                     if (target.health - (bulletDamage * headshotMultiplier) <= 0)
                     {
-                        playerPoints.Points += 90;
+                        player.Points += 90;
                     }
                     target.TakeDamage(bulletDamage * headshotMultiplier);
                 }
@@ -170,7 +170,7 @@ public class PlayerWeapon : MonoBehaviour
                 {
                     if (target.health - (bulletDamage) <= 0)
                     {
-                        playerPoints.Points += 40;
+                        player.Points += 40;
                     }
                     target.TakeDamage(bulletDamage);
                 }
@@ -178,12 +178,12 @@ public class PlayerWeapon : MonoBehaviour
                 {
                     if (target.health - (bulletDamage) <= 0)
                     {
-                        playerPoints.Points += 30;
+                        player.Points += 30;
                     }
                     target.TakeDamage(bulletDamage);
                 }
                 //plus 10 for hit
-                playerPoints.Points += 10;
+                player.Points += 10;
                 PlayerUI.UpdatePointsUI();
                 //addes blood particles
                 ParticleSystem impactBloodEffectPS = Instantiate(impactBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
@@ -287,7 +287,7 @@ public class PlayerWeapon : MonoBehaviour
     {
         if(ammoReserve != magSize * magsToStart)
         {
-            playerPoints.Points -= replenshCost;
+            player.Points -= replenshCost;
             ammoLeft = magSize;
             ammoReserve = magSize * magsToStart;
             animator.SetBool("isEmpty", false);

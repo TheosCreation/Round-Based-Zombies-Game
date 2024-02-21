@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PlayerMelee : MonoBehaviour
 {
-    [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject playerObj;
+    private Player player;
     private PlayerStateMachine playerStateMachine;
     private UIManager PlayerUI;
     private Camera cam;
-    private PlayerPoints playerPoints;
     private PlayerMotor playerMotor;
     private PlayerWeapon playerWeapon;
 
@@ -21,12 +21,12 @@ public class PlayerMelee : MonoBehaviour
 
     void Start()
     {
-        playerStateMachine = Player.GetComponent<PlayerStateMachine>();
-        PlayerUI = Player.GetComponentInChildren<UIManager>();
-        cam = Player.GetComponentInChildren<Camera>();
-        playerPoints = Player.GetComponent<PlayerPoints>();
-        playerMotor = Player.GetComponentInChildren<PlayerMotor>();
-        playerWeapon = Player.GetComponentInChildren<PlayerWeapon>();
+        playerStateMachine = playerObj.GetComponent<PlayerStateMachine>();
+        player = playerObj.GetComponent<Player>();
+        PlayerUI = playerObj.GetComponentInChildren<UIManager>();
+        cam = playerObj.GetComponentInChildren<Camera>();
+        playerMotor = playerObj.GetComponentInChildren<PlayerMotor>();
+        playerWeapon = playerObj.GetComponentInChildren<PlayerWeapon>();
         inputManager = GetComponentInParent<InputManager>();
         animator = GetComponent<Animator>();
     }
@@ -55,7 +55,7 @@ public class PlayerMelee : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if(playerStateMachine.canMelee)
         {
-            playerWeapon = Player.GetComponentInChildren<PlayerWeapon>();
+            playerWeapon = playerObj.GetComponentInChildren<PlayerWeapon>();
             playerMotor.CancelSprint();
             //playerWeapon.GetComponentInChildren<MeshRenderer>().enabled = false;
             playerStateMachine.isMeleeing = true;
@@ -69,12 +69,12 @@ public class PlayerMelee : MonoBehaviour
                 {
                     if (target.health - meleeDamage <= 0)
                     {
-                        playerPoints.Points += 130;
+                        player.Points += 130;
                     }
 
                     target.TakeDamage(meleeDamage);
                     //plus 10 for hit
-                    playerPoints.Points += 10;
+                    player.Points += 10;
                     PlayerUI.UpdatePointsUI();
                 }
             }

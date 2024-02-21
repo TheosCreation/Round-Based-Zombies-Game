@@ -19,7 +19,7 @@ public class Barricade : Interactable
                 plank.transform.position = new Vector3(transform.position.x, Random.Range(transform.position.y-0.3f, transform.position.y + 0.3f), transform.position.z);
                 
                 //give player 10 points
-                nearestPlayer.GetComponent<PlayerPoints>().Points += 10;
+                nearestPlayer.Points += 10;
                 nearestPlayer.GetComponentInChildren<UIManager>().UpdatePointsUI();
             }
             currentPlanks = transform.childCount;

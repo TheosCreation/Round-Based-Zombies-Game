@@ -4,7 +4,7 @@ public abstract class Interactable : MonoBehaviour
 {
     public bool useEvents;
     public string promptMessage;
-    public GameObject nearestPlayer;
+    public Player nearestPlayer;
     public void BaseInteract()
     {
         if(useEvents)

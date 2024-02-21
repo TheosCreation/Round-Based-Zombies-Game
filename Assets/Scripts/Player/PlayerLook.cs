@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour
+public class PlayerLook : NetworkBehaviour
 {
-    public Camera cam;
-    private float xRotation = 0f;
+    public Player player;
+    private float yRotation = 0f;
 
     public float xSensitivity = 100f;
     public float ySensitivity = 100f;
 
     public void ProcessLook(Vector2 input)
     {
+        if(!IsOwner)
+        {
+            return;
+        }
         float mouseX = input.x;
         float mouseY = input.y;
 
-        xRotation -= (mouseY * Time.deltaTime) * ySensitivity;
-        xRotation = Mathf.Clamp(xRotation, -80f, 80f);
-        cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        yRotation -= (mouseY * Time.deltaTime) * ySensitivity;
+        yRotation = Mathf.Clamp(yRotation, -80f, 80f);
+        player.vc.transform.localRotation = Quaternion.Euler(yRotation, 0, 0);
         transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) *xSensitivity);
     }
 }

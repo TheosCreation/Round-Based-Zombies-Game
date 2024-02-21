@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -17,14 +16,14 @@ public class UIManager : MonoBehaviour
     private bool displayedRound1 = false;
     private bool crosshairToggle  = true;
     private bool redDotToggle = false;
-    private PlayerPoints playerPoints;
+    private Player player;
     void Start()
     {
-        playerPoints = GetComponentInParent<PlayerPoints>();
+        player = GetComponentInParent<Player>();
         FirstRoundDisplay.text = "Round 1";
         RoundText.text = "";
         PointsText.text = "500";
-        FirstRoundDisplay.enableWordWrapping = true;
+        FirstRoundDisplay.textWrappingMode = TextWrappingModes.PreserveWhitespace;
     }
     void Update()
     {
@@ -52,7 +51,7 @@ public class UIManager : MonoBehaviour
     }
     public void UpdatePointsUI()
     {
-        PointsText.text = playerPoints.Points.ToString();
+        PointsText.text = player.Points.ToString();
     }
 
     public void UpdateAmmoUI(string AmmoCount)

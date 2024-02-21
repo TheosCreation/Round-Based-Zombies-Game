@@ -3,7 +3,6 @@ using UnityEngine.AI;
 
 public class Door : Interactable
 {
-    private PlayerPoints nearestPlayerPoints;
     private bool doorOpen;
     [SerializeField] private int doorCost;
     [SerializeField] private GameObject[] spawnBarriers;
@@ -20,10 +19,9 @@ public class Door : Interactable
             //attempts to pack a punch
             if (nearestPlayer != null)
             {
-                nearestPlayerPoints = nearestPlayer.GetComponentInChildren<PlayerPoints>();
-                if (nearestPlayerPoints.Points >= doorCost)
+                if (nearestPlayer.Points >= doorCost)
                 {
-                    nearestPlayerPoints.Points -= doorCost;
+                    nearestPlayer.Points -= doorCost;
                     nearestPlayer.GetComponentInChildren<UIManager>().UpdatePointsUI();
                     doorOpen = true;
                     GetComponent<Animator>().SetBool("IsOpen", doorOpen);

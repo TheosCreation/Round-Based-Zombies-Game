@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6360244864628239586}
   - component: {fileID: 6360244864628239597}
   - component: {fileID: 2969032441330546864}
+  - component: {fileID: 2469712217465481752}
   m_Layer: 0
   m_Name: Glock 19
   m_TagString: Glock19
@@ -26,6 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6360244864628239584}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.2739999, y: -0.3589999, z: 0.9960003}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -35,11 +37,10 @@ Transform:
   - {fileID: 197179556917417967}
   - {fileID: 6360244865911269418}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6360244864628239586
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -53,10 +54,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6360244864628239597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +116,20 @@ MonoBehaviour:
   maxPapTier: 3
   papDamageChange: 1.5
   papAmmoChange: 1.2
+--- !u!114 &2469712217465481752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6360244864628239584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 6360244864628239586}
 --- !u!1 &6360244865911269419
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,13 +154,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6360244865911269419}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.031000167, y: 0.035999894, z: -0.4510002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6360244864628239587}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &6360244865911269461
 AudioSource:
@@ -156,6 +173,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -246,6 +264,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6360244864628239587}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4db0f01bc08e046449ea409e0209a071, type: 3}
@@ -437,6 +456,9 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4db0f01bc08e046449ea409e0209a071, type: 3}
 --- !u!4 &197179557265523934 stripped
 Transform:
@@ -453,6 +475,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6360244864628239587}
     m_Modifications:
     - target: {fileID: -9010527566006868404, guid: 2d2fbb57c5c36ca4b8860d66a7b1dd75, type: 3}
@@ -1372,6 +1395,9 @@ PrefabInstance:
       value: -89.98021
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d2fbb57c5c36ca4b8860d66a7b1dd75, type: 3}
 --- !u!4 &197179556917417967 stripped
 Transform:

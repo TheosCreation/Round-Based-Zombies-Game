@@ -1,4 +1,3 @@
-
 public class PackAPunchInteraction : Interactable
 {
     protected override void Interact()

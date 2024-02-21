@@ -7,10 +7,8 @@ using UnityEngine.EventSystems;
 
 public class RoundSpawner : MonoBehaviour
 {
-    public GameObject player;
+    public GameObject[] players;
     [SerializeField] private GameObject[] zombiePrefabs;
-    [SerializeField] private UIManager playerUI;
-    [SerializeField] private PlayerPoints playerPoints;
     [SerializeField] private Vector3[] spawnAroundPoints;
     [SerializeField] private int baseZombies = 8;
     //starts at 1 zombie per 2 seconds and at round 60 max cap of 10 zombies per second so zombiesPerSecond = 10 at round 60 and zombiesPerSecond = 5 at round 30
@@ -50,7 +48,7 @@ public class RoundSpawner : MonoBehaviour
     }
     void Start()
     {
-        playerUI.GetComponent<PlayerUI>();
+        players = GameObject.FindGameObjectsWithTag("Player");
 
         zombiesLeftToSpawn = baseZombies;
         //play start round sound
@@ -81,7 +79,10 @@ public class RoundSpawner : MonoBehaviour
     }
     private void ZombieKilled()
     {
-        playerUI.UpdatePointsUI();
+        foreach (GameObject player in players)
+        {
+            player.GetComponentInChildren<UIManager>().UpdatePointsUI();
+        }
         zombiesAlive--;
     }
 
@@ -91,7 +92,10 @@ public class RoundSpawner : MonoBehaviour
 
         audioInCamera.PlayOneShot(roundStartClip);
         //update round count text
-        playerUI.UpdateRoundUI(currentRound);
+        foreach (GameObject player in players)
+        {
+            player.GetComponentInChildren<UIManager>().UpdateRoundUI(currentRound);
+        }
 
         maxZombiesThisRound = zombiesLeftToSpawn;
         zombiesPerSecond = CalculateZombieRate(currentRound);

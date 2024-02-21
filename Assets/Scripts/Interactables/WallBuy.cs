@@ -1,4 +1,3 @@
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,19 +19,19 @@ public class WallBuy : Interactable
         playerWeapon = weaponSwitcher.playerWeapon;
         if (playerWeapon.tag == weaponPrefab.tag)
         {
-            if(nearestPlayer.GetComponent<PlayerPoints>().Points >= replenshCost)
+            if(nearestPlayer.Points >= replenshCost)
             {
                 playerWeapon.ReplenshAmmo(replenshCost);
             }
         }
-        else if(nearestPlayer.GetComponentInChildren<PlayerPoints>().Points >= weaponCost)
+        else if(nearestPlayer.Points >= weaponCost)
         {
             //Destroys Player Current One then Creates new Weapon
             if (weaponSwitcher.transform.childCount >= weaponSwitcher.maxWeaponCount)
             {
                 Destroy(playerWeapon.GameObject());
             }
-            weaponPrefab.GetComponentInChildren<PlayerWeapon>().Player = nearestPlayer;
+            weaponPrefab.GetComponentInChildren<PlayerWeapon>().Player = nearestPlayer.gameObject;
             GameObject newWeapon = Instantiate(weaponPrefab, prefabWeapon.hipfirePosition, prefabWeapon.hipfireRotation);
             newWeapon.transform.parent = weaponSwitcher.transform;
             newWeapon.transform.localPosition = prefabWeapon.hipfirePosition;
