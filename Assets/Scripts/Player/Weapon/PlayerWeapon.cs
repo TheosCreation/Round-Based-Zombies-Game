@@ -1,7 +1,8 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerWeapon : MonoBehaviour
+public class PlayerWeapon : NetworkBehaviour
 {
     public GameObject Player;
     protected PlayerStateMachine playerStateMachine;
@@ -73,7 +74,11 @@ public class PlayerWeapon : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(playerStateMachine.isShooting && readyToShoot && !playerStateMachine.isReloading && ammoLeft > 0 && !playerStateMachine.isMeleeing)
+        if (!IsOwner)
+        {
+            return;
+        }
+        if (playerStateMachine.isShooting && readyToShoot && !playerStateMachine.isReloading && ammoLeft > 0 && !playerStateMachine.isMeleeing)
         {
             PerformShot();
         } else if(playerStateMachine.isShooting && ammoLeft <= 0 && ammoReserve > 0 && !playerStateMachine.isMeleeing) 
@@ -111,11 +116,19 @@ public class PlayerWeapon : MonoBehaviour
 
     public void StartShot()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         playerStateMachine.isShooting = true;
     }
 
     public void EndShot()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         playerStateMachine.isShooting = false;
         playerStateMachine.cancelSprint = false;
         playedEmptySound = false;
@@ -124,8 +137,12 @@ public class PlayerWeapon : MonoBehaviour
 
     public void UpdateWeaponStats()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         //if increase in PAP Tier apply weapon changes
-        if(packAPunch.papTier > currentPapTier)
+        if (packAPunch.papTier > currentPapTier)
         {
             currentPapTier = packAPunch.papTier;
             bulletDamage *= packAPunch.papDamageChange;
@@ -139,6 +156,10 @@ public class PlayerWeapon : MonoBehaviour
 
     public void PerformShot()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         animator.SetBool("isShooting", true);
         readyToShoot = false;
         Vector3 direction = cam.transform.forward;
@@ -220,13 +241,21 @@ public class PlayerWeapon : MonoBehaviour
     
     public void StartAim()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         playerStateMachine.isAiming = true;
         playerMotor.CancelSprint();
     }
 
     public void EndAim()
     {
-        if(playerStateMachine.isAiming)
+        if (!IsOwner)
+        {
+            return;
+        }
+        if (playerStateMachine.isAiming)
         {
             inAimingMode = false;
             animator.SetBool("isAiming", false);

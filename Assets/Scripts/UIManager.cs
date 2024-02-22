@@ -1,7 +1,8 @@
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
     [SerializeField] private TextMeshProUGUI FirstRoundDisplay;
     [SerializeField] private TextMeshProUGUI RoundText;
@@ -17,6 +18,15 @@ public class UIManager : MonoBehaviour
     private bool crosshairToggle  = true;
     private bool redDotToggle = false;
     private Player player;
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         player = GetComponentInParent<Player>();
@@ -27,7 +37,11 @@ public class UIManager : MonoBehaviour
     }
     void Update()
     {
-        if(displayActive)
+        if (!IsOwner)
+        {
+            return;
+        }
+        if (displayActive)
         {
             displayTimer += Time.deltaTime;
         }
@@ -46,34 +60,58 @@ public class UIManager : MonoBehaviour
 
     public void UpdateRoundUI(int Round)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         displayActive = true;
         RoundText.text = Round.ToString();
     }
     public void UpdatePointsUI()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         PointsText.text = player.Points.ToString();
     }
 
     public void UpdateAmmoUI(string AmmoCount)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         AmmoLeftText.text = AmmoCount;
     }
 
 
     public void UpdateAmmoReserveUI(string AmmoReserve)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         AmmoReserverText.text = AmmoReserve;
     }
 
 
     public void ToggleCrosshair()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         crosshairToggle = !crosshairToggle;
         Crosshair.SetActive(crosshairToggle);
     }
 
     public void ToggleRedDot()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         redDotToggle = !redDotToggle;
         RedDot.SetActive(redDotToggle);
     }

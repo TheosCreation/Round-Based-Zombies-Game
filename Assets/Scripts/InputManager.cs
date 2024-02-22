@@ -10,6 +10,8 @@ public class InputManager : NetworkBehaviour
     private WeaponActions weaponActions;
     private PlayerMelee playerMelee;
     private WeaponSwitching weaponSwitching;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -54,9 +56,9 @@ public class InputManager : NetworkBehaviour
         {
             return;
         }
+        
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
     }
-
     private void LateUpdate()
     {
         if (!IsOwner)

@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class Player : NetworkBehaviour
 {
     [Header("Cameras")]
-    public CinemachineVirtualCamera vc;
+    public Camera cam;
     [SerializeField] private AudioListener audioListener;
+    public float xSensitivity = 100f;
+    public float ySensitivity = 100f;
     [Header("Text Reference")]
     [SerializeField] private TextMeshProUGUI promptText;
 
@@ -40,6 +42,7 @@ public class Player : NetworkBehaviour
         health = maxHealth;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
         inputManager = GetComponent<InputManager>();
+        cam = GetComponentInChildren<Camera>();
     }
 
     public override void OnNetworkSpawn()
@@ -47,11 +50,6 @@ public class Player : NetworkBehaviour
         if (IsOwner)
         {
             audioListener.enabled = true;
-            vc.Priority = 1;
-        }
-        else
-        {
-            vc.Priority = 0;
         }
     }
 
@@ -96,7 +94,7 @@ public class Player : NetworkBehaviour
         }
         // player Interactions
         UpdateText(string.Empty);
-        Ray ray = new Ray(vc.transform.position, vc.transform.forward);
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         //Debug.DrawRay(ray.origin, ray.direction * distance);
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, interactionDistance, mask))
