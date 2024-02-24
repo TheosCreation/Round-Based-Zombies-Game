@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 7882592046415837687}
   m_Layer: 0
   m_Name: LevelManager
-  m_TagString: Untagged
+  m_TagString: LevelManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
+  SpawnPosition: {x: 0, y: 0, z: 0}
+  SpawnRotation: {x: 0, y: 0, z: 0, w: 0}
   zombiePrefabs:
   - {fileID: 8490171792350145661, guid: 8387a289f98f2f64c93eb405da07fcc2, type: 3}
   spawnAroundPoints:

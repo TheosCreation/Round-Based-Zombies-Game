@@ -1498,37 +1498,6 @@ MonoBehaviour:
   maxWeaponCount: 2
   playerWeapon: {fileID: 1444408184}
   playerStateMachine: {fileID: 3060155022287811675}
---- !u!1 &5919423248528389072
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5339509635677218677}
-  m_Layer: 0
-  m_Name: CameraPlacement
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5339509635677218677
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5919423248528389072}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.504, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6850150792607115518}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6563826020895174177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1567,12 +1536,11 @@ Transform:
   m_GameObject: {fileID: 6563826020895174177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.481, z: 0}
+  m_LocalPosition: {x: -4, y: 1.4, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1179395337}
-  - {fileID: 5339509635677218677}
   - {fileID: 1980418045204772732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1667,8 +1635,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 2771797788093817978}
   audioListener: {fileID: 5901997309262911966}
-  xSensitivity: 100
-  ySensitivity: 100
+  xSensitivity: 50
+  ySensitivity: 50
   promptText: {fileID: 882626839}
   maxHealth: 100
   healthRecoverAmmount: 60
@@ -1931,9 +1899,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8642fd2671d88f246bc5a7274531a7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 7489045208335453239}
-  xSensitivity: 100
-  ySensitivity: 100
 --- !u!1001 &6360244866072233877
 PrefabInstance:
   m_ObjectHideFlags: 0

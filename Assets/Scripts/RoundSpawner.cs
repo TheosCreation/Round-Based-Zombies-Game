@@ -7,7 +7,11 @@ using UnityEngine.EventSystems;
 
 public class RoundSpawner : MonoBehaviour
 {
+    [Header("Player Level Variables")]
     public GameObject[] players;
+    public Vector3 SpawnPosition;
+    public Quaternion SpawnRotation;
+    [Header("Zombies Spawning")]
     [SerializeField] private GameObject[] zombiePrefabs;
     [SerializeField] private Vector3[] spawnAroundPoints;
     [SerializeField] private int baseZombies = 8;

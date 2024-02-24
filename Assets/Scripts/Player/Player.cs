@@ -1,4 +1,3 @@
-using Cinemachine;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -6,6 +5,7 @@ using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
+    private GameObject LevelManager;
     [Header("Cameras")]
     public Camera cam;
     [SerializeField] private AudioListener audioListener;
@@ -35,7 +35,12 @@ public class Player : NetworkBehaviour
     public float interactionDistance = 3.0f;
     [SerializeField] private LayerMask mask;
     private InputManager inputManager;
-
+    private void Awake()
+    {
+        LevelManager = GameObject.FindGameObjectWithTag("LevelManager");
+        RoundSpawner roundSpawner = LevelManager.GetComponent<RoundSpawner>();
+        transform.SetPositionAndRotation(roundSpawner.SpawnPosition, roundSpawner.SpawnRotation);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +48,11 @@ public class Player : NetworkBehaviour
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
         inputManager = GetComponent<InputManager>();
         cam = GetComponentInChildren<Camera>();
+        if (!IsOwner)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+        }
+
     }
 
     public override void OnNetworkSpawn()
@@ -51,6 +61,7 @@ public class Player : NetworkBehaviour
         {
             audioListener.enabled = true;
         }
+        base.OnNetworkSpawn();
     }
 
     // Update is called once per frame

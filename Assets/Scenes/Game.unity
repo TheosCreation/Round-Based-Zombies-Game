@@ -1140,7 +1140,7 @@ Transform:
   m_GameObject: {fileID: 529986154}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 493.8744, y: 190.74927, z: 304.36142}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4026,7 +4026,7 @@ Transform:
   m_GameObject: {fileID: 1565727202}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 1, z: -26.93}
+  m_LocalPosition: {x: -4, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4875,6 +4875,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7882592046415837680, guid: 85debe854996a8d4ea263d3aaa86dfae, type: 3}
+      propertyPath: m_TagString
+      value: LevelManager
+      objectReference: {fileID: 0}
     - target: {fileID: 7882592046415837686, guid: 85debe854996a8d4ea263d3aaa86dfae, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.665107
@@ -4931,6 +4935,18 @@ PrefabInstance:
       propertyPath: roundStartClip
       value: 
       objectReference: {fileID: 8300000, guid: 9480ce8ca4afde14d8c917278fd69f34, type: 3}
+    - target: {fileID: 7882592046415837687, guid: 85debe854996a8d4ea263d3aaa86dfae, type: 3}
+      propertyPath: SpawnPosition.x
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7882592046415837687, guid: 85debe854996a8d4ea263d3aaa86dfae, type: 3}
+      propertyPath: SpawnPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7882592046415837687, guid: 85debe854996a8d4ea263d3aaa86dfae, type: 3}
+      propertyPath: SpawnPosition.z
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7882592046415837687, guid: 85debe854996a8d4ea263d3aaa86dfae, type: 3}
       propertyPath: timeBetweenRounds
       value: 10
