@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerWeapon : NetworkBehaviour
+public class PlayerWeapon : MonoBehaviour
 {
     public GameObject Player;
     protected PlayerStateMachine playerStateMachine;
@@ -74,10 +74,6 @@ public class PlayerWeapon : NetworkBehaviour
 
     protected virtual void Update()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         if (playerStateMachine.isShooting && readyToShoot && !playerStateMachine.isReloading && ammoLeft > 0 && !playerStateMachine.isMeleeing)
         {
             PerformShot();
@@ -116,19 +112,11 @@ public class PlayerWeapon : NetworkBehaviour
 
     public void StartShot()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         playerStateMachine.isShooting = true;
     }
 
     public void EndShot()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         playerStateMachine.isShooting = false;
         playerStateMachine.cancelSprint = false;
         playedEmptySound = false;
@@ -137,10 +125,6 @@ public class PlayerWeapon : NetworkBehaviour
 
     public void UpdateWeaponStats()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         //if increase in PAP Tier apply weapon changes
         if (packAPunch.papTier > currentPapTier)
         {
@@ -156,10 +140,6 @@ public class PlayerWeapon : NetworkBehaviour
 
     public void PerformShot()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         animator.SetBool("isShooting", true);
         readyToShoot = false;
         Vector3 direction = cam.transform.forward;
@@ -241,20 +221,12 @@ public class PlayerWeapon : NetworkBehaviour
     
     public void StartAim()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         playerStateMachine.isAiming = true;
         playerMotor.CancelSprint();
     }
 
     public void EndAim()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         if (playerStateMachine.isAiming)
         {
             inAimingMode = false;

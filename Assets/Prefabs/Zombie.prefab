@@ -439,6 +439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8490171792350145663}
+  - component: {fileID: -7410966300011137930}
   - component: {fileID: 8490171792350145660}
   - component: {fileID: 8490171792350145662}
   - component: {fileID: 8490171792350145537}
@@ -472,6 +473,26 @@ Transform:
   - {fileID: 1759295485291056240}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7410966300011137930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490171792350145661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1637947772
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &8490171792350145660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,7 +550,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 3.6000004
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -554,8 +575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 150
-  roundSpawner: {fileID: 0}
+  maxHealth: 1150
 --- !u!114 &7677980859345193265
 MonoBehaviour:
   m_ObjectHideFlags: 0

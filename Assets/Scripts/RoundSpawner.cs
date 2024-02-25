@@ -1,18 +1,18 @@
 using System.Collections;
-using System.Diagnostics;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 
-public class RoundSpawner : MonoBehaviour
+public class RoundSpawner : NetworkBehaviour
 {
+
     [Header("Player Level Variables")]
     public GameObject[] players;
     public Vector3 SpawnPosition;
     public Quaternion SpawnRotation;
     [Header("Zombies Spawning")]
-    [SerializeField] private GameObject[] zombiePrefabs;
+    [SerializeField] private GameObject zombiePrefab;
     [SerializeField] private Vector3[] spawnAroundPoints;
     [SerializeField] private int baseZombies = 8;
     //starts at 1 zombie per 2 seconds and at round 60 max cap of 10 zombies per second so zombiesPerSecond = 10 at round 60 and zombiesPerSecond = 5 at round 30
@@ -22,16 +22,12 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField] private float healthIncreaseMultiplier = 1.1f;
     [SerializeField] private float zombiesMoveSpeedAdd = 0.2f;
 
-
-
     [Header("Audio")]
     public AudioSource audioInCamera;
     public AudioClip roundStartClip;
     public AudioClip roundEndClip;
 
-    [Header("Events")]
-    public static UnityEvent onZombieKilled = new UnityEvent();
-
+    [Header("Rounds")]
     public int currentRound = 1;
     private float timeToStartRound;
     private float timeSinceLastSpawn;
@@ -43,17 +39,17 @@ public class RoundSpawner : MonoBehaviour
     private int zombiesCurrentHealth = 150;
     private float zombiesMoveSpeed = 2.0f;
     private bool isSpawning = false;
-
-
+    public static RoundSpawner Instance { get; private set; }
 
     void Awake()
     {
-        onZombieKilled.AddListener(ZombieKilled);
+        Instance = this;
     }
     void Start()
     {
+        
         players = GameObject.FindGameObjectsWithTag("Player");
-
+        
         zombiesLeftToSpawn = baseZombies;
         //play start round sound
         timeToStartRound = initialRoundStartTime;
@@ -63,10 +59,10 @@ public class RoundSpawner : MonoBehaviour
 
     void Update()
     {
-        if(!isSpawning)
+        if(!IsServer)
         {
             return;
-        }            
+        }
         timeSinceLastSpawn += Time.deltaTime;
         if (timeSinceLastSpawn >= (1f / zombiesPerSecond) && zombiesLeftToSpawn > 0 && zombiesAlive < zombiesAllowedAlive)
         {
@@ -76,12 +72,12 @@ public class RoundSpawner : MonoBehaviour
             timeSinceLastSpawn = 0;
         }
 
-        if(zombiesAlive == 0 && zombiesLeftToSpawn == 0)
+        if(isSpawning && zombiesAlive == 0 && zombiesLeftToSpawn == 0)
         {
             EndRound();
         }
     }
-    private void ZombieKilled()
+    public void ZombieKilled()
     {
         foreach (GameObject player in players)
         {
@@ -194,14 +190,7 @@ public class RoundSpawner : MonoBehaviour
 
     private void SpawnZombie()
     {
-        GameObject prefabToSpawn = zombiePrefabs[0];
-        prefabToSpawn.GetComponent<ZombieHealth>().maxHealth = zombiesCurrentHealth;
-        prefabToSpawn.GetComponent<NavMeshAgent>().speed = zombiesMoveSpeed;
-        Vector3 spawnPositionSelected = spawnAroundPoints[Random.Range(0, spawnAroundPoints.Length)];
-
-        //REVIST THIS PLEASE NOT WORKING
-        Vector3 spawnPosition = new Vector3(spawnPositionSelected.x + Random.Range(-4, 4), 1, spawnPositionSelected.z + Random.Range(-4, 4));
-        Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+        ZombiesGameMultiplayer.Instance.SpawnZombie(zombiePrefab, zombiesCurrentHealth, zombiesMoveSpeed, spawnAroundPoints);
     }
     
     private int ZombiesPerRoundAfterRound12()

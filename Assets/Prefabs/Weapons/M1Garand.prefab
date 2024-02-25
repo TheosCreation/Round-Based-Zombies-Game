@@ -1216,11 +1216,11 @@ MonoBehaviour:
   Player: {fileID: 0}
   layersHit:
     serializedVersion: 2
-    m_Bits: 49
+    m_Bits: 19
   aimingPosition: {x: 0, y: 0, z: 0}
   aimingRotation: {x: 0, y: 0, z: 0, w: 0}
-  hipfirePosition: {x: 0, y: 0, z: 0}
-  hipfireRotation: {x: 0, y: 0, z: 0, w: 0}
+  hipfirePosition: {x: 0.4376, y: -2.616, z: 1.35}
+  hipfireRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   gunBarrel: {fileID: 2017020222}
   bulletTrail: {fileID: 328621789431213768, guid: 43559d27d223bf340b413fde1315c256, type: 3}
   bulletRange: 0

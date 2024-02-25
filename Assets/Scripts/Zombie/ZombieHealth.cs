@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ZombieHealth : MonoBehaviour
 {
     public float health;
     public float maxHealth;
-    [SerializeField] private RoundSpawner roundSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +17,7 @@ public class ZombieHealth : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
         if(health <= 0)
         {
-            RoundSpawner.onZombieKilled.Invoke();
+            RoundSpawner.Instance.ZombieKilled();
             Destroy(gameObject);
         }
     }
