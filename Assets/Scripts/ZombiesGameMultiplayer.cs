@@ -13,7 +13,7 @@ public class ZombiesGameMultiplayer : NetworkBehaviour
 
     public void SpawnZombie(GameObject zombiePrefab, float zombiesCurrentHealth, float zombiesMoveSpeed, Vector3[] spawnAroundPoints)
     {
-        zombiePrefab.GetComponent<ZombieHealth>().maxHealth = zombiesCurrentHealth;
+        zombiePrefab.GetComponent<ZombieAI>().maxHealth = zombiesCurrentHealth;
         zombiePrefab.GetComponent<NavMeshAgent>().speed = zombiesMoveSpeed;
         Vector3 spawnPositionSelected = spawnAroundPoints[Random.Range(0, spawnAroundPoints.Length)];
 
@@ -22,5 +22,19 @@ public class ZombiesGameMultiplayer : NetworkBehaviour
         NetworkObject zombieNetworkObject = NewZombie.GetComponent<NetworkObject>();
         zombieNetworkObject.Spawn(true);
         //Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+    }
+
+    public void DestroyZombieObject(GameObject zombieObject)
+    {
+        DestroyZombieObjectServerRpc(zombieObject.GetComponent<NetworkObject>());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyZombieObjectServerRpc(NetworkObjectReference zombieObjectNetworkObjectReference)
+    {
+        zombieObjectNetworkObjectReference.TryGet(out NetworkObject zombieObjectNetworkObject);
+        ZombieAI Zombie = zombieObjectNetworkObject.GetComponent<ZombieAI>();
+
+        Zombie.DestroySelf();
     }
 }

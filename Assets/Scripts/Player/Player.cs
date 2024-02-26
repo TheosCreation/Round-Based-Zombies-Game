@@ -2,10 +2,10 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : NetworkBehaviour
 {
-    private GameObject LevelManager;
     [Header("Cameras")]
     public Camera cam;
     [SerializeField] private AudioListener audioListener;
@@ -37,9 +37,6 @@ public class Player : NetworkBehaviour
     private InputManager inputManager;
     private void Awake()
     {
-        LevelManager = GameObject.FindGameObjectWithTag("LevelManager");
-        RoundSpawner roundSpawner = LevelManager.GetComponent<RoundSpawner>();
-        transform.SetPositionAndRotation(roundSpawner.SpawnPosition, roundSpawner.SpawnRotation);
     }
     // Start is called before the first frame update
     void Start()
@@ -59,9 +56,19 @@ public class Player : NetworkBehaviour
     {
         if (IsOwner)
         {
+            RoundSpawner.Instance.players = GameObject.FindGameObjectsWithTag("Player");
             audioListener.enabled = true;
         }
         base.OnNetworkSpawn();
+    }
+    public override void OnNetworkDespawn()
+    {
+        if (IsOwner)
+        {
+            RoundSpawner.Instance.players = GameObject.FindGameObjectsWithTag("Player");
+            audioListener.enabled = true;
+        }
+        base.OnNetworkDespawn();
     }
 
     // Update is called once per frame

@@ -1,9 +1,14 @@
 using System;
+using System.Runtime.CompilerServices;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ZombieAI : MonoBehaviour
+public class ZombieAI : NetworkBehaviour
 {
+    public float health;
+    public float maxHealth;
+
     private StateMachine stateMachine;
     private NavMeshAgent agent;
     public NavMeshAgent Agent { get => agent;}
@@ -21,6 +26,7 @@ public class ZombieAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = maxHealth;
         stateMachine = GetComponent<StateMachine>();
         agent = GetComponent<NavMeshAgent>();
         target = GameObject.FindGameObjectWithTag("Player");
@@ -31,6 +37,11 @@ public class ZombieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        health = Mathf.Clamp(health, 0, maxHealth);
+        if (health <= 0)
+        {
+            RoundSpawner.Instance.ZombieKilled(gameObject);
+        }
         PlayerInAttackRange();
         currentState = stateMachine.activeState.ToString();
     }
@@ -48,4 +59,14 @@ public class ZombieAI : MonoBehaviour
             return false;
         }
     }
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+    }
+
+    public void DestroySelf()
+    {
+        GetComponent<NetworkObject>().Despawn();
+        Destroy(gameObject);
+    }    
 }

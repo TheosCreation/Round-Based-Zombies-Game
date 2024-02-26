@@ -64,7 +64,7 @@ public class PlayerMelee : MonoBehaviour
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, meleeDistance))
             {
-                ZombieHealth target = hitInfo.transform.GetComponent<ZombieHealth>();
+                ZombieAI target = hitInfo.transform.GetComponent<ZombieAI>();
                 if (target != null)
                 {
                     if (target.health - meleeDamage <= 0)

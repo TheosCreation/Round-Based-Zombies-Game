@@ -47,7 +47,6 @@ public class RoundSpawner : NetworkBehaviour
     }
     void Start()
     {
-        
         players = GameObject.FindGameObjectsWithTag("Player");
         
         zombiesLeftToSpawn = baseZombies;
@@ -77,12 +76,14 @@ public class RoundSpawner : NetworkBehaviour
             EndRound();
         }
     }
-    public void ZombieKilled()
+    public void ZombieKilled(GameObject zombie)
     {
         foreach (GameObject player in players)
         {
             player.GetComponentInChildren<UIManager>().UpdatePointsUI();
         }
+        //zombie.GetComponent<NetworkObject>().Despawn();
+        DestroyZombieObject(zombie);
         zombiesAlive--;
     }
 
@@ -191,6 +192,11 @@ public class RoundSpawner : NetworkBehaviour
     private void SpawnZombie()
     {
         ZombiesGameMultiplayer.Instance.SpawnZombie(zombiePrefab, zombiesCurrentHealth, zombiesMoveSpeed, spawnAroundPoints);
+    }
+
+    private void DestroyZombieObject(GameObject zombieObject)
+    {
+        ZombiesGameMultiplayer.Instance.DestroyZombieObject(zombieObject);
     }
     
     private int ZombiesPerRoundAfterRound12()

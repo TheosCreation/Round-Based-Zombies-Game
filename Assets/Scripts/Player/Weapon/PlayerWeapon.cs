@@ -156,7 +156,7 @@ public class PlayerWeapon : MonoBehaviour
             //Debug.Log(hit.collider.gameObject.name);
             TrailRenderer trail = Instantiate(bulletTrail, gunBarrel.position, Quaternion.identity);
             StartCoroutine(SpawnTrail(trail, hit));
-            ZombieHealth target = hit.transform.GetComponent<ZombieHealth>();
+            ZombieAI target = hit.transform.GetComponent<ZombieAI>();
             if(target != null)
             {
                 if (hit.collider.gameObject.tag == "Head")
