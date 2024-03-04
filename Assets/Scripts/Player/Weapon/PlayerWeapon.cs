@@ -284,7 +284,7 @@ public class PlayerWeapon : MonoBehaviour
         playerStateMachine.cancelSprint = false;
     }
 
-    public void ReplenshAmmo(int replenshCost)
+    public virtual void ReplenshAmmo(int replenshCost)
     {
         if(ammoReserve != magSize * magsToStart)
         {
@@ -295,6 +295,8 @@ public class PlayerWeapon : MonoBehaviour
             PlayerUI.UpdatePointsUI();
             PlayerUI.UpdateAmmoUI(ammoLeft.ToString());
             PlayerUI.UpdateAmmoReserveUI(ammoReserve.ToString());
+            playerStateMachine.cancelReload = false;
+            ReloadFinish();
         }
     }
     private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit Hit)

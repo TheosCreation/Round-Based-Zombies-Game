@@ -1459,6 +1459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1386828449972134048}
   - component: {fileID: 79546485}
+  - component: {fileID: 8347502259318234488}
   m_Layer: 0
   m_Name: WeaponHolder
   m_TagString: Untagged
@@ -1498,6 +1499,24 @@ MonoBehaviour:
   maxWeaponCount: 2
   playerWeapon: {fileID: 1444408184}
   playerStateMachine: {fileID: 3060155022287811675}
+--- !u!114 &8347502259318234488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5443226804600593891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99580b9aa90d94e4da70faf34e4186f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smooth: 10
+  speedCurve: -5
+  travelLimit: {x: 0.02, y: 0.01, z: 0.01}
+  bobLimit: {x: 0.005, y: 0.02, z: 0.01}
+  bobExaggeration: 5
+  multiplier: {x: 0.5, y: 2, z: 0}
 --- !u!1 &6563826020895174177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,6 +1605,7 @@ MonoBehaviour:
   playerWalkSpeed: 5
   playerSprintSpeed: 8
   speed: 4
+  currentVelocity: {x: 0, y: 0, z: 0}
   gravity: -9.81
   jumpHeight: 0.5
   sprintSpeedMultiplier: 1.5

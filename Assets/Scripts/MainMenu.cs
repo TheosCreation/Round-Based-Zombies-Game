@@ -6,22 +6,12 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    private bool keyPressed;
     [SerializeField] private GameObject startMenu;
     [SerializeField] private GameObject lobbyMenu;
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private Button playButton;
     void Update()
     {
-        if (startMenu.activeSelf == true)
-        {
-            if (Input.anyKey)
-            {
-                playButton.Select();
-                lobbyMenu.SetActive(true);
-                startMenu.SetActive(false);
-            }
-        }
         if (lobbyMenu.activeSelf == true)
         {
         }

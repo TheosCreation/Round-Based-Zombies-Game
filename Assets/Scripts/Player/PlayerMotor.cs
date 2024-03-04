@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerMotor : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerMotor : MonoBehaviour
     public float playerWalkSpeed = 4f;
     public float playerSprintSpeed = 20f;
     public float speed = 4f;
+    public Vector3 currentVelocity;
     public float gravity = -9.81f;
     public float jumpHeight = 1.5f;
     public float sprintSpeedMultiplier = 1.5f;
@@ -26,6 +28,7 @@ public class PlayerMotor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentVelocity = controller.velocity;
         playerStateMachine.isGrounded = controller.isGrounded;
         if(lerpCrouch)
         {
